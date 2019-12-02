@@ -1,0 +1,10 @@
+.DS_Store
+node_modules
+npm-debug.log
+dist
+.idea/
+.bootstraprc*
+deploy/*.PublishSettings
+npm-debug*
+yarn-error.log
+.scannerwork
