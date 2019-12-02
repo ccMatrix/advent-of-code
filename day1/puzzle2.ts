@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { assertEquals } from '../helper';
 
 const puzzle = () => {
     const fuelCalc = (mass: number) => {
@@ -9,9 +10,9 @@ const puzzle = () => {
         return fuel + fuelCalc(fuel);
     }
 
-    console.log(fuelCalc(14) === 2);
-    console.log(fuelCalc(1969) === 966);
-    console.log(fuelCalc(100756) === 50346);
+    assertEquals(2, fuelCalc(14));
+    assertEquals(966, fuelCalc(1969));
+    assertEquals(50346, fuelCalc(100756));
 
     const input = fs.readFileSync('./day1/input.txt').toString();
     const totalMass = input
