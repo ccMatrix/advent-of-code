@@ -4,10 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "puzzle1.1": "ts-node day1/puzzle1.ts",
-    "puzzle1.2": "ts-node day1/puzzle2.ts",
-    "puzzle2.1": "ts-node day2/puzzle1.ts",
-    "puzzle2.2": "ts-node day2/puzzle2.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Benjamin Schirmer (TT/SDU2)",
