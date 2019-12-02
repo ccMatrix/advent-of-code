@@ -76,6 +76,11 @@ graceful-fs@^4.1.6, graceful-fs@^4.2.0:
   resolved "https://pkgs.dev.azure.com/thernovo/_packaging/frontend-libraries/npm/registry/graceful-fs/-/graceful-fs-4.2.3.tgz#4a12ff1b60376ef09862c2093edd908328be8423"
   integrity sha1-ShL/G2A3bvCYYsIJPt2Qgyi+hCM=
 
+inherits@2.0.3:
+  version "2.0.3"
+  resolved "https://pkgs.dev.azure.com/thernovo/_packaging/frontend-libraries/npm/registry/inherits/-/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
+  integrity sha1-Yzwsg+PaQqUC9SRmAiSA9CCCYd4=
+
 json-schema-traverse@^0.4.1:
   version "0.4.1"
   resolved "https://pkgs.dev.azure.com/thernovo/_packaging/frontend-libraries/npm/registry/json-schema-traverse/-/json-schema-traverse-0.4.1.tgz#69f6a87d9513ab8bb8fe63bdb0979c448e684660"
@@ -118,6 +123,19 @@ minimist@^1.2.0:
   version "1.2.0"
   resolved "https://pkgs.dev.azure.com/thernovo/_packaging/frontend-libraries/npm/registry/minimist/-/minimist-1.2.0.tgz#a35008b20f41383eec1fb914f4cd5df79a264284"
   integrity sha1-o1AIsg9BOD7sH7kU9M1d95omQoQ=
+
+path@^0.12.7:
+  version "0.12.7"
+  resolved "https://pkgs.dev.azure.com/thernovo/_packaging/frontend-libraries/npm/registry/path/-/path-0.12.7.tgz#d4dc2a506c4ce2197eb481ebfcd5b36c0140b10f"
+  integrity sha1-1NwqUGxM4hl+tIHr/NWzbAFAsQ8=
+  dependencies:
+    process "^0.11.1"
+    util "^0.10.3"
+
+process@^0.11.1:
+  version "0.11.10"
+  resolved "https://pkgs.dev.azure.com/thernovo/_packaging/frontend-libraries/npm/registry/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
+  integrity sha1-czIwDoQBYb2j5podHZGn1LwW8YI=
 
 punycode@^2.1.0:
   version "2.1.1"
@@ -180,6 +198,13 @@ uri-js@^4.2.2:
   integrity sha1-lMVA4f93KVbiKZUHwBCupsiDjrA=
   dependencies:
     punycode "^2.1.0"
+
+util@^0.10.3:
+  version "0.10.4"
+  resolved "https://pkgs.dev.azure.com/thernovo/_packaging/frontend-libraries/npm/registry/util/-/util-0.10.4.tgz#3aa0125bfe668a4672de58857d3ace27ecb76901"
+  integrity sha1-OqASW/5mikZy3liFfTrOJ+y3aQE=
+  dependencies:
+    inherits "2.0.3"
 
 yn@^3.0.0:
   version "3.1.1"

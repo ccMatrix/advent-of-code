@@ -5,12 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Run current puzzle",
             "type": "node",
             "request": "launch",
-            "name": "Launch Advent of Code",
-            "program": "${workspaceFolder}/index.ts",
-            "preLaunchTask": "tsc: build - tsconfig.json",
-            "outFiles": ["${workspaceFolder}/out/**/*.js"]
-        }
+            "args": ["${relativeFile}"],
+            "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+            "sourceMaps": true,
+            "cwd": "${workspaceRoot}",
+            "protocol": "inspector",
+        }        
     ]
 }
