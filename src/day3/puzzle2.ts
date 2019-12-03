@@ -1,19 +1,48 @@
 import { assertEquals, readFileContents } from '../helper';
-import { clone } from 'lodash';
-import * as manhattan from 'manhattan';
+import { clone, sum } from 'lodash';
 import { writeFileSync } from 'fs';
 
 const boardSize = 10000;
 
 const centralPort = [Math.floor(boardSize / 2), Math.floor(boardSize / 2)];
 
+class DataPoint {
+    private _value = 0;
+    private _steps: Map<number, number>;
+
+    get value() {
+        return this._value;
+    }
+
+    set value(newValue: number) {
+        this._value = newValue;
+    }
+
+    get steps() {
+        return this._steps;
+    }
+
+    constructor(value: number) {
+        this._value = value;
+        this._steps = new Map<number, number>();
+    }
+
+    public setSteps(line: number, steps: number) {
+        if (!this._steps.has(line)) {
+            this._steps.set(line, steps);
+        }
+    }
+}
+
 // Initialize board
 const createBoard = () => {
-    const board = Array<number[]>(boardSize);
-    for (let x = 0; x < boardSize; x++) {
-        const boardLine = Array<number>(boardSize);
-        boardLine.fill(undefined);
-        board[x] = boardLine;
+    const board = new Array<DataPoint[]>(boardSize);
+    for (let y = 0; y < boardSize; y++) {
+        const boardLine = new Array<DataPoint>(boardSize);
+        for (let x = 0; x < boardSize; x++) {
+            boardLine[x] = undefined;
+        }
+        board[y] = boardLine;
     };
     return board;
 }
@@ -31,13 +60,15 @@ enum Direction {
     Left = 'L',
 }
 
-const drawOnBoard = (board: number[][], line: string[], index: Lines) => {
+const drawOnBoard = (board: DataPoint[][], line: string[], index: Lines) => {
     const position = clone(centralPort);
+    let totalSteps = 0;
     for (const instr of line) {
         const match = instr.match(/([UDRL]{1})(\d+)/);
         const direction = match[1];
         let steps = parseInt(match[2], 10);
         for (let step = 0; step < steps; step++) {
+            totalSteps++;
             switch (direction) {
                 case Direction.Down:
                     position[1]++;
@@ -52,9 +83,14 @@ const drawOnBoard = (board: number[][], line: string[], index: Lines) => {
                     position[0]--;
                     break;
             }
-            let currentValue = board[position[1]][position[0]] || 0;
-            currentValue |= index;
-            board[position[1]][position[0]] = currentValue;
+
+            let currentPoint = board[position[1]][position[0]];
+            if (!currentPoint) {
+                currentPoint = new DataPoint(0);
+                board[position[1]][position[0]] = currentPoint;
+            }
+            currentPoint.value |= index;
+            currentPoint.setSteps(index, totalSteps);
         }
     }
 }
@@ -77,7 +113,7 @@ class Tuple {
     }
 }
 
-const findDistance = (lines: string[]) => {
+const findTotalSteps = (lines: string[]) => {
     const board = createBoard();
     lines.forEach((line, index) => {
         const lineCoords = line.split(',');
@@ -86,34 +122,34 @@ const findDistance = (lines: string[]) => {
     const intersections: Array<Tuple> = [];
     board.forEach((row, rowIdx) => {
         row.forEach((line, lineIdx) => {
-            if (line === 3) {
+            if (line && line.value === 3) {
                 intersections.push(new Tuple(lineIdx, rowIdx));
             }
         });
     });
-    const distances = intersections.map((pos) => manhattan([pos.x, pos.y], centralPort.reverse()));
-    return Math.min(...distances);
+    const totalSteps = intersections.map((pos) => sum(Array.from(board[pos.y][pos.x].steps.values())));
+    return Math.min(...totalSteps);
 }
 
-const exportBoard = (board: number[][], name?: string) => {
+const exportBoard = (board: DataPoint[][], name?: string) => {
     let output: string[] = [];
     board.forEach(row => {
         const rowBuffer: string[] = [];
         row.forEach(line => {
-            rowBuffer.push(`${line}`);
+            rowBuffer.push(`${line.value}`);
         });
         output.push(rowBuffer.join(''));
     });
     writeFileSync(`./src/day3/drawing_${name || 'board'}.txt`, output.join('\r\n'));
 }
 
-assertEquals(findDistance(['R75,D30,R83,U83,L12,D49,R71,U7,L72', 'U62,R66,U55,R34,D71,R55,D58,R83']), 159);
-assertEquals(findDistance(['R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51', 'U98,R91,D20,R16,D67,R40,U7,R15,U6,R7']), 135);
+assertEquals(610, findTotalSteps(['R75,D30,R83,U83,L12,D49,R71,U7,L72', 'U62,R66,U55,R34,D71,R55,D58,R83']));
+assertEquals(410, findTotalSteps(['R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51', 'U98,R91,D20,R16,D67,R40,U7,R15,U6,R7']));
 
 
 const input = readFileContents('day3/input.txt', '\n');
 const data = input.filter(d => d !== '');
 
-const distance = findDistance(data);
+const distance = findTotalSteps(data);
 console.log(distance);
 
