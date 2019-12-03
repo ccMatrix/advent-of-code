@@ -1,6 +1,5 @@
 import { assertEquals, readFileContents } from '../helper';
 import { clone, sum } from 'lodash';
-import { writeFileSync } from 'fs';
 
 const boardSize = 10000;
 
@@ -22,8 +21,7 @@ class DataPoint {
         return this._steps;
     }
 
-    constructor(value: number) {
-        this._value = value;
+    constructor() {
         this._steps = new Map<number, number>();
     }
 
@@ -31,6 +29,24 @@ class DataPoint {
         if (!this._steps.has(line)) {
             this._steps.set(line, steps);
         }
+    }
+}
+
+class Tuple {
+    private _x: number;
+    private _y: number;
+
+    get x () {
+        return this._x;
+    }
+
+    get y () {
+        return this._y;
+    }
+
+    constructor(x: number, y: number) {
+        this._x = x;
+        this._y = y;
     }
 }
 
@@ -60,6 +76,15 @@ enum Direction {
     Left = 'L',
 }
 
+const pointFromBoard = (board: DataPoint[][], position: number[]) => {
+    let currentPoint = board[position[1]][position[0]];
+    if (!currentPoint) {
+        currentPoint = new DataPoint();
+        board[position[1]][position[0]] = currentPoint;
+    }
+    return currentPoint;
+}
+
 const drawOnBoard = (board: DataPoint[][], line: string[], index: Lines) => {
     const position = clone(centralPort);
     let totalSteps = 0;
@@ -84,32 +109,10 @@ const drawOnBoard = (board: DataPoint[][], line: string[], index: Lines) => {
                     break;
             }
 
-            let currentPoint = board[position[1]][position[0]];
-            if (!currentPoint) {
-                currentPoint = new DataPoint(0);
-                board[position[1]][position[0]] = currentPoint;
-            }
+            let currentPoint = pointFromBoard(board, position);
             currentPoint.value |= index;
             currentPoint.setSteps(index, totalSteps);
         }
-    }
-}
-
-class Tuple {
-    private _x: number;
-    private _y: number;
-
-    get x () {
-        return this._x;
-    }
-
-    get y () {
-        return this._y;
-    }
-
-    constructor(x: number, y: number) {
-        this._x = x;
-        this._y = y;
     }
 }
 
@@ -129,18 +132,6 @@ const findTotalSteps = (lines: string[]) => {
     });
     const totalSteps = intersections.map((pos) => sum(Array.from(board[pos.y][pos.x].steps.values())));
     return Math.min(...totalSteps);
-}
-
-const exportBoard = (board: DataPoint[][], name?: string) => {
-    let output: string[] = [];
-    board.forEach(row => {
-        const rowBuffer: string[] = [];
-        row.forEach(line => {
-            rowBuffer.push(`${line.value}`);
-        });
-        output.push(rowBuffer.join(''));
-    });
-    writeFileSync(`./src/day3/drawing_${name || 'board'}.txt`, output.join('\r\n'));
 }
 
 assertEquals(610, findTotalSteps(['R75,D30,R83,U83,L12,D49,R71,U7,L72', 'U62,R66,U55,R34,D71,R55,D58,R83']));
