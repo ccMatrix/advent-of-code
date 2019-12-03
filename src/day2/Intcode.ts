@@ -9,7 +9,7 @@ const intCode = (memory: number[]) => {
     while (i < memory.length) {
         const instruction = memory[i];
         switch (instruction) {
-            case Instruction.Add: 
+            case Instruction.Add:
                 const sum = memory[memory[i + 1]] + memory[memory[i + 2]];
                 memory[memory[i + 3]] = sum;
                 i += 4;
@@ -27,6 +27,6 @@ const intCode = (memory: number[]) => {
         }
     }
     return memory;
-}
+};
 
 export default intCode;
