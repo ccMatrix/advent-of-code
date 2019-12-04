@@ -1,3 +1,5 @@
+import { assertFalse, assertTrue } from '../helper';
+
 (() => {
     const checkPassword = (candidate: number) => {
         const str = candidate.toString();
@@ -20,6 +22,10 @@
         }
         return pwCount;
     };
+
+    assertTrue(checkPassword(111111));
+    assertFalse(checkPassword(223450));
+    assertFalse(checkPassword(123789));
 
     const passwords = findPasswords(172930, 683082);
     console.log(passwords);
