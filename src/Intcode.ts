@@ -3,6 +3,10 @@ enum Instruction {
     Mul = 2,
     Input = 3,
     Output = 4,
+    JumpIfTrue = 5,
+    JumpIfFalse = 6,
+    LessThan = 7,
+    Equals = 8,
     Break = 99,
 }
 
@@ -56,14 +60,54 @@ const intCode = (memory: number[], input?: number, outputs?: number[]) => {
                 if (!outputs) {
                     throw Error('Output array not specified');
                 }
-                outputs.push(fromMemory(i + 1, Mode.Position));
+                outputs.push(fromMemory(i + 1, modes[0]));
                 i += 2;
                 break;
+            case Instruction.JumpIfTrue: {
+                const newPosition = fromMemory(i + 1, modes[0]);
+                if (newPosition !== 0) {
+                    i = fromMemory(i + 2, modes[1]);
+                } else {
+                    i += 3;
+                }
+                break;
+            }
+            case Instruction.JumpIfFalse: {
+                const newPosition = fromMemory(i + 1, modes[0]);
+                if (newPosition === 0) {
+                    i = fromMemory(i + 2, modes[1]);
+                } else {
+                    i += 3;
+                }
+                break;
+            }
+            case Instruction.LessThan: {
+                const first = fromMemory(i + 1, modes[0]);
+                const second = fromMemory(i + 2, modes[1]);
+                if (first < second) {
+                    memory[memory[i + 3]] = 1;
+                } else {
+                    memory[memory[i + 3]] = 0;
+                }
+                i += 4;
+                break;
+            }
+            case Instruction.Equals: {
+                const first = fromMemory(i + 1, modes[0]);
+                const second = fromMemory(i + 2, modes[1]);
+                if (first === second) {
+                    memory[memory[i + 3]] = 1;
+                } else {
+                    memory[memory[i + 3]] = 0;
+                }
+                i += 4;
+                break;
+            }
             case Instruction.Break:
                 i += 1;
                 return memory;
             default:
-                throw Error('Unknown opt code detected!');
+                throw Error(`Unknown opt code ${instruction} detected!`);
         }
     }
     return memory;
