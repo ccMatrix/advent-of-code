@@ -84,22 +84,14 @@ const intCode = (memory: number[], input?: number, outputs?: number[]) => {
             case Instruction.LessThan: {
                 const first = fromMemory(i + 1, modes[0]);
                 const second = fromMemory(i + 2, modes[1]);
-                if (first < second) {
-                    memory[memory[i + 3]] = 1;
-                } else {
-                    memory[memory[i + 3]] = 0;
-                }
+                memory[memory[i + 3]] = (first < second) ? 1 : 0;
                 i += 4;
                 break;
             }
             case Instruction.Equals: {
                 const first = fromMemory(i + 1, modes[0]);
                 const second = fromMemory(i + 2, modes[1]);
-                if (first === second) {
-                    memory[memory[i + 3]] = 1;
-                } else {
-                    memory[memory[i + 3]] = 0;
-                }
+                memory[memory[i + 3]] = (first === second) ? 1 : 0;
                 i += 4;
                 break;
             }
