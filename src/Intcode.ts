@@ -26,14 +26,12 @@ const intCode = (memory: number[], input?: number, outputs?: number[]) => {
     };
 
     const parseModes = (value: number) => {
-        const modes: number[] = [];
-        let v = Math.floor(value / 100);
-        modes.push(v % 10);
-        v = Math.floor(v / 10);
-        modes.push(v % 10);
-        v = Math.floor(v / 10);
-        modes.push(v % 10);
-        return modes;
+        return value.toString()
+            .padStart(5, '0')
+            .substring(0, 3)
+            .split('')
+            .reverse()
+            .map((d) => parseInt(d, 10));
     };
 
     let i = 0;
