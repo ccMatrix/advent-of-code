@@ -1,6 +1,6 @@
 import { assertEquals, readFileContents } from '../helper';
 
-import runCode from './Intcode';
+import runCode from '../Intcode';
 
 assertEquals([2, 0, 0, 0, 99], runCode([1, 0, 0, 0, 99]));
 assertEquals([2, 3, 0, 6, 99], runCode([2, 3, 0, 3, 99]));
