@@ -27,9 +27,9 @@ import IntCoder from '../Intcode';
         while (engines.every((engine) => engine.status !== Status.Break)) {
             for (let amplifier = 0; amplifier < 5; ++amplifier) {
                 const engine = engines[amplifier];
-                const outputs = engine.run(inputs[amplifier]);
+                engine.run(inputs[amplifier]);
                 const output = inputs[amplifier === 4 ? 0 : amplifier + 1];
-                outputs.forEach((out) => output.push(out));
+                engine.runOutput.forEach((out) => output.push(out));
             }
         }
 

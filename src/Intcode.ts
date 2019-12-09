@@ -29,6 +29,7 @@ export enum Status {
 class IntCoder {
     private _memory: number[];
     private _outputs: number[];
+    private _runOutputs: number[];
     private _iterator = 0;
     private _status = Status.Init;
     private _relativeBase = 0;
@@ -45,6 +46,10 @@ class IntCoder {
         return this._outputs[this.outputs.length - 1];
     }
 
+    get runOutput() {
+        return this._runOutputs;
+    }
+
     get memory() {
         return this._memory;
     }
@@ -55,7 +60,7 @@ class IntCoder {
     }
 
     public run(input?: number[]) {
-        const runOutputs = [];
+        this._runOutputs = [];
         while (true) {
             const value = this._memory[this._iterator];
             const instruction = value % 100;
@@ -74,7 +79,7 @@ class IntCoder {
                 case Instruction.Input:
                     if (input.length === 0) {
                         this._status = Status.Wait;
-                        return runOutputs;
+                        return this;
                     }
                     this.toMemory(this._iterator + 1, modes[0], input.shift());
                     this._iterator += 2;
@@ -82,7 +87,7 @@ class IntCoder {
                 case Instruction.Output:
                     const output = this.fromMemory(this._iterator + 1, modes[0]);
                     this._outputs.push(output);
-                    runOutputs.push(output);
+                    this._runOutputs.push(output);
                     this._iterator += 2;
                     break;
                 case Instruction.JumpIfTrue: {
@@ -123,7 +128,7 @@ class IntCoder {
                     break;
                 case Instruction.Break:
                     this._status = Status.Break;
-                    return runOutputs;
+                    return this;
                 default:
                     throw Error(`Unknown opt code ${instruction} detected!`);
             }

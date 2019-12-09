@@ -13,8 +13,8 @@ import IntCoder from '../Intcode';
             const runMemory = clone(memory);
             const parameters = [settings[amplifier], output];
             const intCoder = new IntCoder(runMemory);
-            const outputs = intCoder.run(parameters);
-            output = outputs.shift();
+            intCoder.run(parameters);
+            output = intCoder.runOutput.shift();
         }
         return output;
     };
