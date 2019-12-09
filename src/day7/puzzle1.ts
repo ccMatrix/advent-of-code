@@ -1,6 +1,6 @@
 import { clone } from 'lodash';
 import { assertEquals, readFileContents } from '../helper';
-import intCode from '../Intcode';
+import IntCoder from '../Intcode';
 
 (() => {
 
@@ -12,8 +12,8 @@ import intCode from '../Intcode';
         for (let amplifier = 0; amplifier < 5; ++amplifier) {
             const runMemory = clone(memory);
             const parameters = [settings[amplifier], output];
-            const outputs = [];
-            intCode(runMemory, parameters, outputs);
+            const intCoder = new IntCoder(runMemory);
+            const outputs = intCoder.run(parameters);
             output = outputs.shift();
         }
         return output;

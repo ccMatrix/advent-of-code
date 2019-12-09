@@ -1,3 +1,5 @@
+import { clone } from 'lodash';
+
 enum Instruction {
     Add = 1,
     Mul = 2,
@@ -15,92 +17,130 @@ enum Mode {
     Immediate = 1,
 }
 
-const intCode = (memory: number[], input?: number[], outputs?: number[]) => {
-    const fromMemory = (position: number, mode: number) => {
+export enum Status {
+    Init = 0,
+    Running = 1,
+    Wait = 2,
+    Break = 3,
+}
+
+class IntCoder {
+    private _memory: number[];
+    private _outputs: number[];
+    private _iterator = 0;
+    private _status = Status.Init;
+
+    get status() {
+        return this._status;
+    }
+
+    get outputs() {
+        return this._outputs;
+    }
+
+    get lastOutput() {
+        return this._outputs[this.outputs.length - 1];
+    }
+
+    get memory() {
+        return this._memory;
+    }
+
+    constructor(memory: number[]) {
+        this._memory = clone(memory);
+        this._outputs = [];
+    }
+
+    public run(input?: number[]) {
+        const runOutputs = [];
+        while (this._iterator < this._memory.length) {
+            const value = this._memory[this._iterator];
+            const instruction = value % 100;
+            const modes = this.parseModes(value);
+            switch (instruction) {
+                case Instruction.Add:
+                    const sum = this.fromMemory(this._iterator + 1, modes[0]) + this.fromMemory(this._iterator + 2, modes[1]);
+                    this._memory[this._memory[this._iterator + 3]] = sum;
+                    this._iterator += 4;
+                    break;
+                case Instruction.Mul:
+                    const mul = this.fromMemory(this._iterator + 1, modes[0]) * this.fromMemory(this._iterator + 2, modes[1]);
+                    this._memory[this._memory[this._iterator + 3]] = mul;
+                    this._iterator += 4;
+                    break;
+                case Instruction.Input:
+                    if (input.length === 0) {
+                        this._status = Status.Wait;
+                        return runOutputs;
+                    }
+                    this._memory[this._memory[this._iterator + 1]] = input.shift();
+                    this._iterator += 2;
+                    break;
+                case Instruction.Output:
+                    const output = this.fromMemory(this._iterator + 1, modes[0]);
+                    this._outputs.push(output);
+                    runOutputs.push(output);
+                    this._iterator += 2;
+                    break;
+                case Instruction.JumpIfTrue: {
+                    const newPosition = this.fromMemory(this._iterator + 1, modes[0]);
+                    if (newPosition !== 0) {
+                        this._iterator = this.fromMemory(this._iterator + 2, modes[1]);
+                    } else {
+                        this._iterator += 3;
+                    }
+                    break;
+                }
+                case Instruction.JumpIfFalse: {
+                    const newPosition = this.fromMemory(this._iterator + 1, modes[0]);
+                    if (newPosition === 0) {
+                        this._iterator = this.fromMemory(this._iterator + 2, modes[1]);
+                    } else {
+                        this._iterator += 3;
+                    }
+                    break;
+                }
+                case Instruction.LessThan: {
+                    const first = this.fromMemory(this._iterator + 1, modes[0]);
+                    const second = this.fromMemory(this._iterator + 2, modes[1]);
+                    this._memory[this._memory[this._iterator + 3]] = (first < second) ? 1 : 0;
+                    this._iterator += 4;
+                    break;
+                }
+                case Instruction.Equals: {
+                    const first = this.fromMemory(this._iterator + 1, modes[0]);
+                    const second = this.fromMemory(this._iterator + 2, modes[1]);
+                    this._memory[this._memory[this._iterator + 3]] = (first === second) ? 1 : 0;
+                    this._iterator += 4;
+                    break;
+                }
+                case Instruction.Break:
+                    this._status = Status.Break;
+                    return runOutputs;
+                default:
+                    throw Error(`Unknown opt code ${instruction} detected!`);
+            }
+        }
+    }
+
+    private fromMemory(position: number, mode: number) {
         switch (mode) {
             case Mode.Position:
-                return memory[memory[position]];
+                return this._memory[this._memory[position]];
             case Mode.Immediate:
-                return memory[position];
+                return this._memory[position];
         }
-    };
+    }
 
-    const parseModes = (value: number) => {
+    private parseModes(value: number) {
         return value.toString()
             .padStart(5, '0')
             .substring(0, 3)
             .split('')
             .reverse()
             .map((d) => parseInt(d, 10));
-    };
-
-    let i = 0;
-    while (i < memory.length) {
-        const value = memory[i];
-        const instruction = value % 100;
-        const modes = parseModes(value);
-        switch (instruction) {
-            case Instruction.Add:
-                const sum = fromMemory(i + 1, modes[0]) + fromMemory(i + 2, modes[1]);
-                memory[memory[i + 3]] = sum;
-                i += 4;
-                break;
-            case Instruction.Mul:
-                const mul = fromMemory(i + 1, modes[0]) * fromMemory(i + 2, modes[1]);
-                memory[memory[i + 3]] = mul;
-                i += 4;
-                break;
-            case Instruction.Input:
-                memory[memory[i + 1]] = input.shift();
-                i += 2;
-                break;
-            case Instruction.Output:
-                if (!outputs) {
-                    throw Error('Output array not specified');
-                }
-                outputs.push(fromMemory(i + 1, modes[0]));
-                i += 2;
-                break;
-            case Instruction.JumpIfTrue: {
-                const newPosition = fromMemory(i + 1, modes[0]);
-                if (newPosition !== 0) {
-                    i = fromMemory(i + 2, modes[1]);
-                } else {
-                    i += 3;
-                }
-                break;
-            }
-            case Instruction.JumpIfFalse: {
-                const newPosition = fromMemory(i + 1, modes[0]);
-                if (newPosition === 0) {
-                    i = fromMemory(i + 2, modes[1]);
-                } else {
-                    i += 3;
-                }
-                break;
-            }
-            case Instruction.LessThan: {
-                const first = fromMemory(i + 1, modes[0]);
-                const second = fromMemory(i + 2, modes[1]);
-                memory[memory[i + 3]] = (first < second) ? 1 : 0;
-                i += 4;
-                break;
-            }
-            case Instruction.Equals: {
-                const first = fromMemory(i + 1, modes[0]);
-                const second = fromMemory(i + 2, modes[1]);
-                memory[memory[i + 3]] = (first === second) ? 1 : 0;
-                i += 4;
-                break;
-            }
-            case Instruction.Break:
-                i += 1;
-                return memory;
-            default:
-                throw Error(`Unknown opt code ${instruction} detected!`);
-        }
     }
-    return memory;
-};
 
-export default intCode;
+}
+
+export default IntCoder;

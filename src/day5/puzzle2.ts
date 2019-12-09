@@ -1,13 +1,13 @@
-import { assertFalse, assertTrue, readFileContents, assertEquals } from '../helper';
-import intCode from '../Intcode';
+import { assertEquals, readFileContents } from '../helper';
+import IntCoder from '../Intcode';
 
 import { clone } from 'lodash';
 
 (() => {
     const runTest = (testData: number[], value: number) => {
-        const outputs: number[] = [];
-        intCode(testData, value, outputs);
-        return outputs[outputs.length - 1];
+        const intCoder = new IntCoder(testData);
+        intCoder.run([value]);
+        return intCoder.lastOutput;
     };
 
     const input = readFileContents('day5/input.txt', ',');
