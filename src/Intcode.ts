@@ -15,7 +15,7 @@ enum Mode {
     Immediate = 1,
 }
 
-const intCode = (memory: number[], input?: number, outputs?: number[]) => {
+const intCode = (memory: number[], input?: number[], outputs?: number[]) => {
     const fromMemory = (position: number, mode: number) => {
         switch (mode) {
             case Mode.Position:
@@ -51,7 +51,7 @@ const intCode = (memory: number[], input?: number, outputs?: number[]) => {
                 i += 4;
                 break;
             case Instruction.Input:
-                memory[memory[i + 1]] = input;
+                memory[memory[i + 1]] = input.shift();
                 i += 2;
                 break;
             case Instruction.Output:

@@ -6,7 +6,7 @@ import intCode from '../Intcode';
     const data = input.filter((d) => d !== '').map((d) => parseInt(d, 10));
 
     const outputs: number[] = [];
-    intCode(data, 1, outputs);
+    intCode(data, [1], outputs);
     const diagnosticCode = outputs[outputs.length - 1];
     console.log(diagnosticCode);
 })();
