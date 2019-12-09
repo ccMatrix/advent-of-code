@@ -1,4 +1,4 @@
-import { assertEquals, splitFileContents } from '../helper';
+import { splitFileContents } from '../helper';
 import IntCoder from '../Intcode';
 
 (() => {
@@ -8,7 +8,7 @@ import IntCoder from '../Intcode';
     const runCode = (memory: number[]) => {
         const intCoder = new IntCoder(memory);
         intCoder.run([2]);
-        return intCoder.outputs;
+        return intCoder.lastOutput;
     };
 
     console.log(runCode(data));
