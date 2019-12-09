@@ -1,8 +1,8 @@
-import { assertFalse, assertTrue, readFileContents } from '../helper';
+import { assertFalse, assertTrue, splitFileContents } from '../helper';
 import IntCoder from '../Intcode';
 
 (() => {
-    const input = readFileContents('day5/input.txt', ',');
+    const input = splitFileContents('day5/input.txt', ',');
     const data = input.filter((d) => d !== '').map((d) => parseInt(d, 10));
 
     const intCoder = new IntCoder(data);

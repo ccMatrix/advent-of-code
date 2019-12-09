@@ -23,11 +23,13 @@ export const assertEquals = (expected: any, current: any) => {
     }
 };
 
-export const readFileContents = (filename: string, delimiter?: string) => {
+export const splitFileContents = (filename: string, delimiter: string) => {
     const data = fs.readFileSync(path.join('./src/', filename), { encoding: 'utf-8' }).toString();
-    if (!delimiter) {
-        return data;
-    } else {
-        return data.split(delimiter);
-    }
+    return data.split(delimiter);
 };
+
+export const readFileContents = (filename: string) => {
+    const data = fs.readFileSync(path.join('./src/', filename), { encoding: 'utf-8' }).toString();
+    return data;
+};
+

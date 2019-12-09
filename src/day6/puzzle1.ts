@@ -1,5 +1,5 @@
 import { shuffle, sum } from 'lodash';
-import { assertEquals, readFileContents } from '../helper';
+import { assertEquals, splitFileContents } from '../helper';
 
 (() => {
 
@@ -38,7 +38,7 @@ import { assertEquals, readFileContents } from '../helper';
     assertEquals(42, countOrbits(testData.reverse()));
     assertEquals(42, countOrbits(shuffle(testData)));
 
-    const input = readFileContents('day6/input.txt', '\n');
+    const input = splitFileContents('day6/input.txt', '\n');
     const data = input.filter((d) => d !== '');
     console.log(countOrbits(data));
 })();

@@ -1,4 +1,4 @@
-import { assertEquals, readFileContents } from '../helper';
+import { assertEquals, splitFileContents } from '../helper';
 
 const fuelCalc = (mass: number) => {
     if (mass === 0) {
@@ -12,7 +12,7 @@ assertEquals(2, fuelCalc(14));
 assertEquals(966, fuelCalc(1969));
 assertEquals(50346, fuelCalc(100756));
 
-const input = readFileContents('day1/input.txt', '\n');
+const input = splitFileContents('day1/input.txt', '\n');
 
 const totalMass = input
     .filter((d) => d !== '')

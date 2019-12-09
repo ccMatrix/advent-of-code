@@ -1,5 +1,5 @@
 import { intersection, shuffle } from 'lodash';
-import { assertEquals, readFileContents } from '../helper';
+import { assertEquals, splitFileContents } from '../helper';
 
 (() => {
 
@@ -53,7 +53,7 @@ import { assertEquals, readFileContents } from '../helper';
     assertEquals(4, transferOrbits(testData.reverse()));
     assertEquals(4, transferOrbits(shuffle(testData)));
 
-    const input = readFileContents('day6/input.txt', '\n');
+    const input = splitFileContents('day6/input.txt', '\n');
     const data = input.filter((d) => d !== '');
     console.log(transferOrbits(data));
 })();

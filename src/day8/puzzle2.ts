@@ -1,4 +1,3 @@
-import { minBy } from 'lodash';
 import { assertEquals, readFileContents } from '../helper';
 
 (() => {

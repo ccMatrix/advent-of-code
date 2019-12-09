@@ -1,10 +1,10 @@
 import { clone } from 'lodash';
-import { assertEquals, readFileContents } from '../helper';
+import { assertEquals, splitFileContents } from '../helper';
 import IntCoder from '../Intcode';
 
 (() => {
 
-    const input = readFileContents('day7/input.txt', ',');
+    const input = splitFileContents('day7/input.txt', ',');
     const data = input.filter((d) => d !== '').map((d) => parseInt(d, 10));
 
     const runAmplifiers = (memory: number[], settings: number[]) => {

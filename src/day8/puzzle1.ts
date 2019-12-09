@@ -1,5 +1,5 @@
 import { minBy } from 'lodash';
-import { assertEquals, readFileContents } from '../helper';
+import { readFileContents } from '../helper';
 
 interface INumbers {
     zero: number;
@@ -10,7 +10,7 @@ interface INumbers {
 
 (() => {
 
-    const input = readFileContents('day8/input.txt') as string;
+    const input = readFileContents('day8/input.txt');
 
     const layers = input.match(/[0-9]{150}/g);
 

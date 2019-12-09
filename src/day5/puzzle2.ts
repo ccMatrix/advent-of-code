@@ -1,4 +1,4 @@
-import { assertEquals, readFileContents } from '../helper';
+import { assertEquals, splitFileContents } from '../helper';
 import IntCoder from '../Intcode';
 
 import { clone } from 'lodash';
@@ -10,7 +10,7 @@ import { clone } from 'lodash';
         return intCoder.lastOutput;
     };
 
-    const input = readFileContents('day5/input.txt', ',');
+    const input = splitFileContents('day5/input.txt', ',');
     const data = input.filter((d) => d !== '').map((d) => parseInt(d, 10));
 
     const testDataInput = [3, 21, 1008, 21, 8, 20, 1005, 20, 22, 107, 8, 21, 20, 1006, 20, 31,
