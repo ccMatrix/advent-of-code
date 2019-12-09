@@ -1,7 +1,7 @@
 import { assertEquals, readFileContents } from '../helper';
 
 (() => {
-    const input = readFileContents('day8/input.txt') as string;
+    const input = readFileContents('day8/input.txt');
 
     const renderImage = (image: string, width: number, height: number) => {
         const layers = image.match(new RegExp(`[0-9]{${width * height}}`, 'g'));
