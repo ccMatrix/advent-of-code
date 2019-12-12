@@ -1,3 +1,4 @@
+import { maxBy, minBy } from 'lodash';
 import { splitFileContents } from '../helper';
 import IntCoder, { Status } from '../Intcode';
 
@@ -35,6 +36,7 @@ import IntCoder, { Status } from '../Intcode';
         let currentY = 0;
         let direction: number = Direction.Up;
         const pixels: IPixel[] = [];
+        pixels.push({ x: 0, y: 0, colors: [Color.White] });
         while (intCoder.status !== Status.Break) {
             let currentPixel = pixels.find((pixel) => pixel.x === currentX && pixel.y === currentY);
             if (!currentPixel) {
@@ -67,10 +69,26 @@ import IntCoder, { Status } from '../Intcode';
             }
         }
 
-        const paintedPixels = pixels.length;
-        return paintedPixels;
+        const renderPixels = () => {
+            const minX = minBy(pixels, (pixel) => pixel.x).x;
+            const maxX = maxBy(pixels, (pixel) => pixel.x).x;
+            const minY = minBy(pixels, (pixel) => pixel.y).y;
+            const maxY = maxBy(pixels, (pixel) => pixel.y).y;
+
+            for (let y = maxY; y >= minY; --y) {
+                let line = '';
+                for (let x = minX; x <= maxX; ++x) {
+                    const pixel = pixels.find((p) => p.x === x && p.y === y);
+                    const color = pixel && pixel.colors.shift() || Color.Black;
+                    line += (color === Color.Black) ? ' ' : '█';
+                }
+                console.log(line);
+            }
+        };
+
+        renderPixels();
     };
 
-    console.log(runCode(data));
+    runCode(data);
 
 })();
