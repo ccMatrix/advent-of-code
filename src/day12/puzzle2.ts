@@ -1,5 +1,4 @@
 import { assertEquals, splitFileContents } from '../helper';
-import { cloneDeep, isEqual, max } from 'lodash';
 
 (() => {
     interface ICoordinate {
@@ -31,17 +30,6 @@ import { cloneDeep, isEqual, max } from 'lodash';
         .map((l) => l.match(/<x=(?<x>[0-9-]+), y=(?<y>[0-9-]+), z=(?<z>[0-9-]+)>/))
         .map((matches) => matches.groups)
         .map((pos: any) => createMoon(parseInt(pos.x, 10), parseInt(pos.y, 10), parseInt(pos.z, 10)));
-
-    const getTotalEnergy = (moons: IMoon[]) => {
-        return moons
-            .map((moon) => {
-                const sum = (val: ICoordinate) => {
-                    return Math.abs(val.x) + Math.abs(val.y) + Math.abs(val.z);
-                };
-                return sum(moon.pos) * sum(moon.vel);
-            })
-            .reduceRight((prev, current) => prev + current, 0);
-    };
 
     const calcLcm = (n1: number, n2: number) => {
         const higher = Math.max(n1, n2);
@@ -164,5 +152,4 @@ import { cloneDeep, isEqual, max } from 'lodash';
     assertEquals(4686774924, runIterations([ createMoon(-8, -10, 0), createMoon(5, 5, 10), createMoon(2, -7, 3), createMoon(9, -8, -3)], { printEvery: 1000 }));
 
     console.log(runIterations(dataMoons,  { printEvery: 10000 }));
-
 })();
