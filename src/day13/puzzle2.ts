@@ -2,7 +2,7 @@ import { maxBy } from 'lodash';
 import {  splitFileContents } from '../helper';
 import IntCoder from '../Intcode';
 
-(() => {
+(async () => {
     enum TileId {
         Empty = 0,
         Wall = 1,
@@ -23,14 +23,17 @@ import IntCoder from '../Intcode';
         Right = 1,
     }
 
+    const visualGame = true;
+
     const input = splitFileContents('day13/input.txt', ',');
     const data = input.filter((d) => d !== '').map((d) => parseInt(d, 10));
 
-    const renderGame = (tiles: ITile[], score: number) => {
+    const renderGame = async (tiles: ITile[], score: number) => {
         const width = maxBy(tiles, (tile) => tile.x).x;
         const height = maxBy(tiles, (tile) => tile.y).y;
         console.clear();
         console.log(`score: ${score}`);
+        const lines: string[] = [];
         for (let y = 0; y <= height; ++y) {
             const line: string[] = [];
             for (let x = 0; x <= width; ++x) {
@@ -53,11 +56,13 @@ import IntCoder from '../Intcode';
                         break;
                 }
             }
-            console.log(line.join(''));
+            lines.push(line.join(''));
         }
+        console.log(lines.join('\n'));
+        await new Promise((resolve) => setTimeout(resolve, 125));
     };
 
-    const runCode = (memory: number[]) => {
+    const runCode = async (memory: number[]) => {
         let score = 0;
 
         // Enable free play
@@ -84,7 +89,9 @@ import IntCoder from '../Intcode';
             }
 
             // print game
-            renderGame(tiles, score);
+            if (visualGame) {
+                await renderGame(tiles, score);
+            }
 
             // Determine next joystick direction
             const ball = tiles.find((t) => t.type === TileId.Ball);
@@ -106,6 +113,6 @@ import IntCoder from '../Intcode';
         return score;
     };
 
-    console.log(runCode(data));
+    console.log(await runCode(data));
 
 })();
