@@ -31,25 +31,25 @@ import IntCoder from '../Intcode';
         const height = maxBy(tiles, (tile) => tile.y).y;
         console.clear();
         console.log(`score: ${score}`);
-        for (let y = 0; y < height; ++y) {
+        for (let y = 0; y <= height; ++y) {
             const line: string[] = [];
-            for (let x = 0; x < width; ++x) {
+            for (let x = 0; x <= width; ++x) {
                 const tile = tiles.find((t) => t.x === x && t.y === y) || { x: 0, y: 0, type: TileId.Empty };
                 switch (tile.type) {
                     case TileId.Ball:
-                        line.push('O');
+                        line.push('•');
                         break;
                     case TileId.Block:
-                        line.push('B');
+                        line.push('▄');
                         break;
                     case TileId.Empty:
                         line.push(' ');
                         break;
                     case TileId.HorizontalPaddle:
-                        line.push('█');
+                        line.push('‾');
                         break;
                     case TileId.Wall:
-                        line.push('P');
+                        line.push('█');
                         break;
                 }
             }
