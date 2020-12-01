@@ -1,3 +1,1 @@
-import puzzle from './day2/puzzle2';
-
-puzzle();
+console.log('Just run the current puzzle via debugger');

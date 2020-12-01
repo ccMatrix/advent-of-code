@@ -24,12 +24,12 @@ export const assertEquals = (expected: any, current: any) => {
 };
 
 export const splitFileContents = (filename: string, delimiter: string) => {
-    const data = fs.readFileSync(path.join('./src/', filename), { encoding: 'utf-8' }).toString();
+    const data = fs.readFileSync(path.join(__dirname, filename), { encoding: 'utf-8' }).toString();
     return data.split(delimiter);
 };
 
 export const readFileContents = (filename: string) => {
-    const data = fs.readFileSync(path.join('./src/', filename), { encoding: 'utf-8' }).toString();
+    const data = fs.readFileSync(path.join(__dirname, filename), { encoding: 'utf-8' }).toString();
     return data;
 };
 
