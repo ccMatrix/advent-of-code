@@ -1,3 +1,4 @@
+import { without } from 'lodash';
 import { assertEquals, splitFileContents } from '../helper';
 
 (() => {
@@ -5,11 +6,14 @@ import { assertEquals, splitFileContents } from '../helper';
         .map(i => parseInt(i, 10));
     const target = 2020;
 
-    input.forEach(a => {
-        input.forEach(b => {
-            input.forEach(c => {
+    let numbers = input;
+    numbers.forEach(a => {
+        numbers.forEach(b => {
+            numbers.forEach(c => {
                 if ((a + b + c) === target) {
-                    console.log(`${a} + ${b} + ${c} = 2020; ${a} * ${b} * ${c} = ${a * b * c}`);
+                    console.log(`${a} + ${b} + ${c} = 2020`);
+                    console.log(`${a} * ${b} * ${c} = ${a * b * c}`);
+                    numbers = without(numbers, a, b, c);
                     return;
                 }
             })
