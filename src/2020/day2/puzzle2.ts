@@ -10,14 +10,11 @@ interface PasswordData {
 
 (() => {
     const isValid = (pw: PasswordData) => {
-        const chars = pw.password.split('');
-        if (chars[pw.first - 1] === pw.character && chars[pw.second - 1] !== pw.character) {
-            return true;
-        }
-        if (chars[pw.first - 1] !== pw.character && chars[pw.second - 1] === pw.character) {
-            return true;
-        }
-        return false;
+        const chars = [
+            pw.password[pw.first - 1],
+            pw.password[pw.second - 1],
+        ];
+        return (chars.filter(c => c === pw.character).length === 1);
     };
 
     const input = splitFileContents('day2/input.txt', '\n')
