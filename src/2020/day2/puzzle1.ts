@@ -15,7 +15,6 @@ interface PasswordData {
     };
 
     const input = splitFileContents('day2/input.txt', '\n')
-        .filter(line => !!line)
         .map<PasswordData>(line => {
             const [ _, minChars, maxChars, character, password ] = line.match(/([0-9]+)-([0-9]+) ([a-z]{1}): ([a-z]+)/);
             const pw: PasswordData = {
