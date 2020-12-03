@@ -1,4 +1,4 @@
-import { assertEquals, splitFileContents } from '../helper';
+import { splitFileContents } from '../helper';
 
 (() => {
     enum Field {
