@@ -52,5 +52,6 @@ import { splitFileContents } from '../helper';
     assertEquals(19208, countOptions(exampleInput2));
 
     console.log('calculating connection options...');
-    console.log('Connection options:', countOptions(input));
+    const totalOptions = countOptions(input);
+    console.log('Connection options:', totalOptions);
 })();
