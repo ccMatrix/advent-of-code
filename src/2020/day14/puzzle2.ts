@@ -17,7 +17,6 @@ import { splitFileContents } from '../helper';
             else {
                 const [ _, addressStr, valueStr ] = line.match(/mem\[(\d+)\] = (\d+)/);
                 const value = parseInt(valueStr, 10);
-
                 const binaryAddr = parseInt(addressStr, 10).toString(2).split('').reverse();
 
                 const newValue = [];
@@ -25,11 +24,8 @@ import { splitFileContents } from '../helper';
                     if (bitMask[i] === '0') {
                         newValue.push(`${binaryAddr[i] || 0}`);
                     }
-                    else if (bitMask[i] === '1') {
-                        newValue.push('1');
-                    }
                     else {
-                        newValue.push('X');
+                        newValue.push(bitMask[i]);
                     }
                 }
 
