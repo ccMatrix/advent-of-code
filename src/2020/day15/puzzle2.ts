@@ -24,7 +24,7 @@ import { assertEquals } from '../helper';
 
     interface CacheData {
         first: number;
-        second?: number;
+        second: number;
     }
     interface Cache {
         [propName: number]: CacheData;
@@ -33,44 +33,45 @@ import { assertEquals } from '../helper';
     const runMemoryGame = (data: number[], endPosition: number = 2020) => {
         const mem: number[] = new Array<number>(endPosition);
         const cache: Cache = new Array<CacheData>(endPosition);
-        const findLastIndex = (lastNumber: number) => {
-            const numbers = cache[lastNumber];
-            return numbers.second;
+
+        const findLastIndex = (num: number) => {
+            return cache[num].second;
         };
-        const setLastIndex = (lastNumber: number, pos: number) => {
-            if (cache[lastNumber] === undefined) {
-                cache[lastNumber] = {
+
+        const setLastIndex = (num: number, pos: number) => {
+            if (cache[num] === undefined) {
+                cache[num] = {
                     first: pos,
                     second: -1,
                 };
             }
             else {
-                const cacheData = cache[lastNumber];
+                const cacheData = cache[num];
                 cacheData.second = cacheData.first;
                 cacheData.first = pos;
             }
-        }
+        };
 
-        // Populate cache
+        // Populate cache and output array
         data.forEach((num, idx) => {
-            setLastIndex(num, idx);
             mem[idx] = num;
+            setLastIndex(num, idx);
         });
 
         let position = data.length;
+        let lastNumber = mem[data.length - 1];
         while (position < endPosition) {
-            const lastNumber = mem[position - 1];
             const lastIndex = findLastIndex(lastNumber);
             if (lastIndex === -1) {
-                mem[position] = 0;
-                setLastIndex(0, position);
+                lastNumber = 0;
             }
             else {
-                const value = position - lastIndex - 1;
-                mem[position] = value;
-                setLastIndex(value, position);
+                lastNumber = position - lastIndex - 1;
             }
-            position++;
+            mem[position] = lastNumber;
+            setLastIndex(lastNumber, position);
+
+            ++position;
         }
 
         return mem[endPosition - 1];
