@@ -22,30 +22,32 @@ import { assertEquals } from '../helper';
         { input: [ 3,1,2 ], finalPos: 30000000, result: 362 },
     ];
 
+    interface CacheData {
+        first: number;
+        second?: number;
+    }
     interface Cache {
-        [propName: number]: number[];
+        [propName: number]: CacheData;
     }
 
     const runMemoryGame = (data: number[], endPosition: number = 2020) => {
-        const mem: number[] = new Array(endPosition);
-        const cache: Cache = new Array(endPosition);
-        const findLastIndex = (lastNumber: number, pos: number) => {
-            const cacheKey = `${lastNumber}`;
-            const numbers = cache[cacheKey];
-            if (numbers[0] >= pos - 2) {
-                return numbers[1];
-            }
-            return numbers[0];
+        const mem: number[] = new Array<number>(endPosition);
+        const cache: Cache = new Array<CacheData>(endPosition);
+        const findLastIndex = (lastNumber: number) => {
+            const numbers = cache[lastNumber];
+            return numbers.second;
         };
         const setLastIndex = (lastNumber: number, pos: number) => {
-            const cacheKey = `${lastNumber}`;
-
-            if (cache[cacheKey] === undefined) {
-                cache[cacheKey] = [pos, undefined];
+            if (cache[lastNumber] === undefined) {
+                cache[lastNumber] = {
+                    first: pos,
+                    second: -1,
+                };
             }
             else {
-                cache[cacheKey][1] = cache[cacheKey][0]
-                cache[cacheKey][0] = pos;
+                const cacheData = cache[lastNumber];
+                cacheData.second = cacheData.first;
+                cacheData.first = pos;
             }
         }
 
@@ -58,13 +60,13 @@ import { assertEquals } from '../helper';
         let position = data.length;
         while (position < endPosition) {
             const lastNumber = mem[position - 1];
-            const lastIndex = findLastIndex(lastNumber, position);
-            if (lastIndex === undefined) {
+            const lastIndex = findLastIndex(lastNumber);
+            if (lastIndex === -1) {
                 mem[position] = 0;
                 setLastIndex(0, position);
             }
             else {
-                const value = position - 1 - lastIndex;
+                const value = position - lastIndex - 1;
                 mem[position] = value;
                 setLastIndex(value, position);
             }
