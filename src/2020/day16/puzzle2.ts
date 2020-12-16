@@ -1,4 +1,4 @@
-import { difference, findLastKey, intersection } from 'lodash';
+import { difference } from 'lodash';
 import { assertEquals, splitFileContents } from '../helper';
 
 (() => {
@@ -46,6 +46,16 @@ import { assertEquals, splitFileContents } from '../helper';
             ownTicket: undefined,
             nearbyTickets: [],
         };
+
+        const parseTicket = (line: string) => line.split(',').map(d => parseInt(d, 10));
+        const createRange = (startStr: string, endStr: string) => {
+            const range: number[] = [];
+            for (let i = parseInt(startStr, 10); i <= parseInt(endStr, 10); ++i) {
+                range.push(i);
+            }
+            return range;
+        }
+
         data.forEach(line => {
             if (line.length === 0) {
                 return;
@@ -68,21 +78,15 @@ import { assertEquals, splitFileContents } from '../helper';
                         possibleIndexes: [],
                         processed: false,
                     }
-                    for (let i = parseInt(ruleData[2], 10); i <= parseInt(ruleData[3], 10); ++i) {
-                        rule.range.push(i);
-                    }
-                    for (let i = parseInt(ruleData[4], 10); i <= parseInt(ruleData[5], 10); ++i) {
-                        rule.range.push(i);
-                    }
+                    rule.range.push(...createRange(ruleData[2], ruleData[3]));
+                    rule.range.push(...createRange(ruleData[4], ruleData[5]));
                     result.rules.push(rule);
                     break;
                 case ParseMode.OwnTicket:
-                    result.ownTicket = line.split(',').map(d => parseInt(d, 10));
+                    result.ownTicket = parseTicket(line);
                     break;
                 case ParseMode.NearbyTickets:
-                    result.nearbyTickets.push(
-                        line.split(',').map(d => parseInt(d, 10))
-                    );
+                    result.nearbyTickets.push(parseTicket(line));
                     break;
             }
         });
@@ -91,21 +95,15 @@ import { assertEquals, splitFileContents } from '../helper';
     }
 
     const findDepartureValue = (data: PuzzleData) => {
-        const validTickets: Ticket[] = [];
-        data.nearbyTickets.forEach(ticket => {
-            const isValid = ticket.every(num => data.rules.some(rule => rule.range.includes(num)));
-            if (isValid) {
-                validTickets.push(ticket);
-            }
-        });
+        const validTickets: Ticket[] =
+            data.nearbyTickets.filter(ticket =>
+                ticket.every(num => data.rules.some(rule => rule.range.includes(num)))
+            );
 
         for (let i = 0; i < data.rules.length; ++i) {
             data.rules.forEach(rule => {
-                const possibleValues: number[] = [];
-
-                validTickets.forEach(ticket => {
-                    possibleValues.push(ticket[i]);
-                });
+                const possibleValues: number[] =
+                    validTickets.map(ticket => ticket[i]);
 
                 const diff = difference(possibleValues, rule.range);
                 if (diff.length === 0) {
@@ -126,12 +124,12 @@ import { assertEquals, splitFileContents } from '../helper';
             seek.processed = true;
         }
 
-        let ownTicketValue = 1;
-        data.rules.filter(rule => rule.name.includes('departure')).forEach(rule => {
-            ownTicketValue *= (data.ownTicket[rule.possibleIndexes[0]]);
-        });
+        const ticketValue =
+            data.rules
+                .filter(rule => rule.name.includes('departure'))
+                .reduceRight((value, rule) => value *= (data.ownTicket[rule.possibleIndexes[0]]), 1);
 
-        return ownTicketValue;
+        return ticketValue;
     }
 
     const exampleData = parseInput(exampleInput);
