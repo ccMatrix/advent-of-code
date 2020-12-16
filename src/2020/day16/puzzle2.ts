@@ -1,4 +1,3 @@
-import { difference } from 'lodash';
 import { assertEquals, splitFileContents } from '../helper';
 
 (() => {
@@ -74,12 +73,13 @@ import { assertEquals, splitFileContents } from '../helper';
                     const ruleData = line.match(/([a-z\s]+): ([0-9]+)-([0-9]+) or ([0-9]+)-([0-9]+)/);
                     const rule: Rule = {
                         name: ruleData[1],
-                        range: [],
+                        range: [
+                            ...createRange(ruleData[2], ruleData[3]),
+                            ...createRange(ruleData[4], ruleData[5]),
+                        ],
                         possibleIndexes: [],
                         processed: false,
                     }
-                    rule.range.push(...createRange(ruleData[2], ruleData[3]));
-                    rule.range.push(...createRange(ruleData[4], ruleData[5]));
                     result.rules.push(rule);
                     break;
                 case ParseMode.OwnTicket:
@@ -102,10 +102,10 @@ import { assertEquals, splitFileContents } from '../helper';
 
         for (let i = 0; i < data.rules.length; ++i) {
             data.rules.forEach(rule => {
-                const possibleValues: number[] =
-                    validTickets.map(ticket => ticket[i]);
+                const diff = validTickets
+                    .map(ticket => ticket[i])
+                    .filter(v => !rule.range.includes(v));
 
-                const diff = difference(possibleValues, rule.range);
                 if (diff.length === 0) {
                     rule.possibleIndexes.push(i);
                 }
@@ -113,20 +113,19 @@ import { assertEquals, splitFileContents } from '../helper';
         }
 
         // Go through all rules. remove those that are certain (1 array length) from other arrays and reduce until each index is used only once!
-        while (!data.rules.every(rule => rule.possibleIndexes.length === 1)) {
-            const seek = data.rules.find(r => r.possibleIndexes.length === 1 && !r.processed);
-            data.rules.forEach(rule => {
-                if (rule.name === seek.name) {
-                    return;
-                }
-                rule.possibleIndexes = difference(rule.possibleIndexes, seek.possibleIndexes);
-            });
+        while (!data.rules.every(rule => rule.processed)) {
+            const seek = data.rules.find(r => !r.processed && r.possibleIndexes.length === 1);
+            data.rules
+                .filter(rule => rule.name !== seek.name)
+                .forEach(rule => {
+                    rule.possibleIndexes = rule.possibleIndexes.filter(i => i !== seek.possibleIndexes[0]);
+                });
             seek.processed = true;
         }
 
         const ticketValue =
             data.rules
-                .filter(rule => rule.name.includes('departure'))
+                .filter(rule => rule.name.startsWith('departure'))
                 .reduceRight((value, rule) => value *= (data.ownTicket[rule.possibleIndexes[0]]), 1);
 
         return ticketValue;
@@ -138,6 +137,5 @@ import { assertEquals, splitFileContents } from '../helper';
     const puzzleData = parseInput(input);
     const departuerInfo = findDepartureValue(puzzleData);
     console.log('My Departure info is:', departuerInfo);
-
 
 })();
