@@ -87,7 +87,7 @@ import { assertEquals, splitFileContents } from '../helper';
 
     const runGame = (map: Map<string,boolean> & MapExtension, iteration: number = 6) => {
         if (iteration === 0) {
-            return Array.from(map.values()).filter(v => v).length;
+            return Array.from(map.values()).length;
         }
 
         const nextMap: Map<string,boolean> & MapExtension = new Map<string, boolean>();
