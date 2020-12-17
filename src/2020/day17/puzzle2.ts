@@ -2,10 +2,10 @@ import { assertEquals, splitFileContents } from '../helper';
 
 (() => {
     class Point {
-        w: number;
-        x: number;
-        y: number;
-        z: number;
+        public w: number;
+        public x: number;
+        public y: number;
+        public z: number;
 
         constructor(w: number, x: number, y: number, z: number) {
             this.w = w;
@@ -14,7 +14,7 @@ import { assertEquals, splitFileContents } from '../helper';
             this.z = z;
         }
 
-        toKey() {
+        public toKey() {
             return `${this.w}/${this.x}/${this.y}/${this.z}`;
         }
     }
@@ -33,35 +33,24 @@ import { assertEquals, splitFileContents } from '../helper';
     }
 
     const parseInput = (data: string[]): Map<string, boolean> & MapExtension => {
-        const gameMap: Map<string,boolean> & MapExtension = new Map<string, boolean>();
-
-        const minPoint: Point = new Point(0, 0, 0, 0);
-        const maxPoint: Point = new Point(0, 0, 0, 0);
+        const gameMap: Map<string, boolean> & MapExtension = new Map<string, boolean>();
 
         const z = 0;
         const w = 0;
+        gameMap.minPoint = new Point(0, 0, 0, 0);
         data.forEach((line, y) => {
             line.split('').forEach((cube, x) => {
                 const point = new Point(w, x, y, z);
                 if (cube === '#') {
                     gameMap.set(point.toKey(), true);
                 }
-                minPoint.w = Math.min(minPoint.w, w);
-                minPoint.x = Math.min(minPoint.x, x);
-                minPoint.y = Math.min(minPoint.y, y);
-                minPoint.z = Math.min(minPoint.z, z);
 
-                maxPoint.w = Math.max(maxPoint.w, w);
-                maxPoint.x = Math.max(maxPoint.x, x);
-                maxPoint.y = Math.max(maxPoint.y, y);
-                maxPoint.z = Math.max(maxPoint.z, z);
+                gameMap.maxPoint = new Point(w, x, y, z);
             });
         });
-        gameMap.minPoint = minPoint;
-        gameMap.maxPoint = maxPoint;
 
         return gameMap;
-    }
+    };
 
     const collectStates = (map: Map<string, boolean>, point: Point) => {
         const states: boolean[] = [];
@@ -83,14 +72,14 @@ import { assertEquals, splitFileContents } from '../helper';
             }
         }
         return states;
-    }
+    };
 
-    const runGame = (map: Map<string,boolean> & MapExtension, iteration: number = 6) => {
+    const runGame = (map: Map<string, boolean> & MapExtension, iteration: number = 6) => {
         if (iteration === 0) {
             return Array.from(map.values()).length;
         }
 
-        const nextMap: Map<string,boolean> & MapExtension = new Map<string, boolean>();
+        const nextMap: Map<string, boolean> & MapExtension = new Map<string, boolean>();
         nextMap.minPoint = new Point(
             map.minPoint.w - 1,
             map.minPoint.x - 1,
@@ -115,11 +104,9 @@ import { assertEquals, splitFileContents } from '../helper';
                         const currentState = !!map.get(point.toKey());
                         if (currentState && !(active === 2 || active === 3)) {
                             nextMap.delete(point.toKey());
-                        }
-                        else if (!currentState && active === 3) {
+                        } else if (!currentState && active === 3) {
                             nextMap.set(point.toKey(), true);
-                        }
-                        else if (currentState) {
+                        } else if (currentState) {
                             nextMap.set(point.toKey(), currentState);
                         }
                     }
@@ -128,7 +115,7 @@ import { assertEquals, splitFileContents } from '../helper';
         }
 
         return runGame(nextMap, iteration - 1);
-    }
+    };
 
     const exampleGame = parseInput(exampleInput);
     const exampleActiveCubes = runGame(exampleGame, 6);
