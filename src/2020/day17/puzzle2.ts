@@ -53,7 +53,7 @@ import { assertEquals, splitFileContents } from '../helper';
     };
 
     const collectStates = (map: Map<string, boolean>, point: Point) => {
-        const states: boolean[] = [];
+        let active = 0;
         const pointKey = point.toKey();
         for (let w = point.w - 1; w <= point.w + 1; ++w) {
             for (let x = point.x - 1; x <= point.x + 1; ++x) {
@@ -65,13 +65,13 @@ import { assertEquals, splitFileContents } from '../helper';
                             continue;
                         }
                         if (!!map.get(stateKey)) {
-                            states.push(true);
+                            active++;
                         }
                     }
                 }
             }
         }
-        return states;
+        return active;
     };
 
     const runGame = (map: Map<string, boolean> & MapExtension, iteration: number = 6) => {
@@ -98,9 +98,8 @@ import { assertEquals, splitFileContents } from '../helper';
                 for (let y = map.minPoint.y - 1; y <= map.maxPoint.y + 1; ++y) {
                     for (let z = map.minPoint.z - 1; z <= map.maxPoint.z + 1; ++z) {
                         const point = new Point(w, x, y, z);
-                        const states = collectStates(map, point);
+                        const active = collectStates(map, point);
 
-                        const active = states.length;
                         const currentState = !!map.get(point.toKey());
                         if (currentState && !(active === 2 || active === 3)) {
                             nextMap.delete(point.toKey());
