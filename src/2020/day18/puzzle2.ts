@@ -24,44 +24,23 @@ import { assertEquals, splitFileContents } from '../helper';
 
     const runEquation = (line: string) => {
         const runSubEquation = (equation: string) => {
-            let subResult = 0;
-            let operator = Operator.Add;
             let elements = equation.split(' ');
 
-            while (true) {
+            do {
                 const addPos = elements.findIndex(el => el === '+');
                 if (addPos === -1) {
                     break;
                 }
                 elements[addPos - 1] = `${parseInt(elements[addPos - 1], 10) + parseInt(elements[addPos + 1], 10)}`;
-                elements[addPos] = null;
-                elements[addPos + 1] = null;
-                elements = elements.filter(el => el !== null);
+                delete elements[addPos];
+                delete elements[addPos + 1];
+                elements = Object.values(elements);
             }
-            elements
-                .filter(el => el !== null)
-                .forEach(el => {
-                switch (el) {
-                    case '+':
-                        operator = Operator.Add;
-                        break;
-                    case '*':
-                        operator = Operator.Mul;
-                        break;
-                    default:
-                        const num = parseInt(el, 10);
-                        switch (operator) {
-                            case Operator.Add:
-                                subResult += num;
-                                break;
-                            case Operator.Mul:
-                                subResult *= num;
-                                break;
-                        }
-                        break;
-                }
-            });
-            return subResult;
+            while (true);
+
+            return elements
+                .filter(el => el !== '*')
+                .reduceRight((prev, numStr) => prev * parseInt(numStr, 10), 1);
         };
 
         while (true) {
