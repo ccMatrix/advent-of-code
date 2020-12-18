@@ -1,3 +1,4 @@
+import { isNumber } from 'lodash';
 import { assertEquals, splitFileContents } from '../helper';
 
 (() => {
@@ -17,22 +18,23 @@ import { assertEquals, splitFileContents } from '../helper';
     const equations = splitFileContents('day18/input.txt', '\n');
 
     const runEquation = (line: string) => {
-        const runSubEquation = (equation: string) => {
-            const elements = equation.split(' ');
+        const runSubEquation = (equation: string): number => {
+            const elements = equation.split(' ').map(x => ['+', '*'].includes(x) ? x : parseInt(x, 10));
 
             do {
                 const addPos = elements.findIndex(el => el === '+');
                 if (addPos === -1) {
                     break;
                 }
-                const value = `${parseInt(elements[addPos - 1], 10) + parseInt(elements[addPos + 1], 10)}`;
+                const value = (elements[addPos - 1] as number) + (elements[addPos + 1] as number);
                 elements.splice(addPos - 1, 3, value);
             }
             while (true);
 
             return elements
                 .filter(el => el !== '*')
-                .reduceRight((prev, numStr) => prev * parseInt(numStr, 10), 1);
+                .map<number>(el => el as number)
+                .reduceRight((prev: number, num: number) => prev * num, 1);
         };
 
         while (true) {
