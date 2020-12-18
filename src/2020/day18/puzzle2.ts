@@ -1,4 +1,3 @@
-import { isNumber } from 'lodash';
 import { assertEquals, splitFileContents } from '../helper';
 
 (() => {
