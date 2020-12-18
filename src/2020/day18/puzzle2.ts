@@ -1,12 +1,6 @@
-import { assert } from 'console';
 import { assertEquals, splitFileContents } from '../helper';
 
 (() => {
-    enum Operator {
-        Add,
-        Mul,
-    };
-
     interface Example {
         equation: string;
         result: number;
@@ -24,17 +18,15 @@ import { assertEquals, splitFileContents } from '../helper';
 
     const runEquation = (line: string) => {
         const runSubEquation = (equation: string) => {
-            let elements = equation.split(' ');
+            const elements = equation.split(' ');
 
             do {
                 const addPos = elements.findIndex(el => el === '+');
                 if (addPos === -1) {
                     break;
                 }
-                elements[addPos - 1] = `${parseInt(elements[addPos - 1], 10) + parseInt(elements[addPos + 1], 10)}`;
-                delete elements[addPos];
-                delete elements[addPos + 1];
-                elements = Object.values(elements);
+                const value = `${parseInt(elements[addPos - 1], 10) + parseInt(elements[addPos + 1], 10)}`;
+                elements.splice(addPos - 1, 3, value);
             }
             while (true);
 
