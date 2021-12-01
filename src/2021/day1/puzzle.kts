@@ -1,7 +1,9 @@
 import java.io.File
 
-fun readFileAsLinesUsingUseLines(fileName: String): List<String>
-        = File(fileName).useLines { it.toList() };
+fun readFileAsLinesUsingUseLines(fileName: String): List<Int>
+        = File(fileName)
+            .useLines { it.toList() }
+            .map { s ->  s.toInt() }
 
 fun calcSlidingValues(input: List<Int>): Array<Int>
         = Array<Int>(input.count() - 2, { input.subList(it, it + 3).sum() })
@@ -14,9 +16,8 @@ fun countIncreases(input: Array<Int>): Int
 
 fun puzzle1() {
     val input = readFileAsLinesUsingUseLines("./input.txt")
-        .map { s ->  s.toInt() }
         .toTypedArray()
-    var increases = countIncreases(input);
+    var increases = countIncreases(input)
     println("There are $increases increases")
 }
 
@@ -29,7 +30,6 @@ fun p2sample() {
 
 fun puzzle2() {
     val input: List<Int> = readFileAsLinesUsingUseLines("./input.txt")
-        .map { s ->  s.toInt() };
     val slidingValues = calcSlidingValues(input)
     val increases = countIncreases(slidingValues)
     println("There are $increases increases")
