@@ -5,34 +5,35 @@ fun readFileAsLinesUsingUseLines(fileName: String): List<Int>
             .useLines { it.toList() }
             .map { s ->  s.toInt() }
 
-fun calcSlidingValues(input: List<Int>): Array<Int>
-        = Array<Int>(input.count() - 2, { input.subList(it, it + 3).sum() })
+fun List<Int>.calcSlidingValues(): Array<Int>
+        = Array<Int>(this.count() - 2, { this.subList(it, it + 3).sum() })
 
-fun countIncreases(input: Array<Int>): Int
-        = input.foldIndexed(0, {
+fun Array<Int>.countIncreases(): Int
+        = this.foldIndexed(0, {
             idx, acc, element ->
-                if (idx < input.size - 1 && input[idx + 1] > element) acc + 1 else acc
+                if (idx < this.size - 1 && this[idx + 1] > element) acc + 1 else acc
         })
 
 fun puzzle1() {
-    val input = readFileAsLinesUsingUseLines("./input.txt")
+    val increases = readFileAsLinesUsingUseLines("./input.txt")
         .toTypedArray()
-    var increases = countIncreases(input)
+        .countIncreases()
     println("There are $increases increases")
 }
 
 fun p2sample() {
-    val input: List<Int> = listOf(199, 200, 208, 210, 200, 207, 240, 269, 260, 263)
-    val slidingValues = calcSlidingValues(input)
-    val increases = countIncreases(slidingValues)
+    val increases = listOf(199, 200, 208, 210, 200, 207, 240, 269, 260, 263)
+        .calcSlidingValues()
+        .countIncreases()
     println("There are $increases increases")
 }
 
 fun puzzle2() {
-    val input: List<Int> = readFileAsLinesUsingUseLines("./input.txt")
-    val slidingValues = calcSlidingValues(input)
-    val increases = countIncreases(slidingValues)
+    val increases = readFileAsLinesUsingUseLines("./input.txt")
+        .calcSlidingValues()
+        .countIncreases()
     println("There are $increases increases")
 }
 
+puzzle1()
 puzzle2()
