@@ -3,14 +3,14 @@ import java.io.File
 fun readFileAsLinesUsingUseLines(fileName: String): List<String>
         = File(fileName).useLines { it.toList() };
 
-fun calcSlidingValues(input: List<Int>): Array<Int> =
-    Array<Int>(input.count() - 2, { input.subList(it, it + 3).sum() })
+fun calcSlidingValues(input: List<Int>): Array<Int>
+        = Array<Int>(input.count() - 2, { input.subList(it, it + 3).sum() })
 
-fun countIncreases(input: Array<Int>): Int =
-    input.foldIndexed(0, {
-        idx, acc, element ->
-            if (idx < input.size - 1 && input[idx + 1] > element) acc + 1 else acc
-    })
+fun countIncreases(input: Array<Int>): Int
+        = input.foldIndexed(0, {
+            idx, acc, element ->
+                if (idx < input.size - 1 && input[idx + 1] > element) acc + 1 else acc
+        })
 
 fun puzzle1() {
     val input = readFileAsLinesUsingUseLines("./input.txt")
