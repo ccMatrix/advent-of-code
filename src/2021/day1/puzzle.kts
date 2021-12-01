@@ -6,25 +6,17 @@ fun readFileAsLinesUsingUseLines(fileName: String): List<String>
 fun calcSlidingValues(input: List<Int>): Array<Int> =
     Array<Int>(input.count() - 2, { input.subList(it, it + 3).sum() })
 
-fun countIncreases(input: Array<Int>): Int {
-    var increases = 0;
-    for (index in 0..input.count() - 2) {
-        if (input[index + 1] > input[index]) {
-            increases++;
-        }
-    }
-    return increases
-}
+fun countIncreases(input: Array<Int>): Int =
+    input.foldIndexed(0, {
+        idx, acc, element ->
+            if (idx < input.size - 1 && input[idx + 1] > element) acc + 1 else acc
+    })
 
 fun puzzle1() {
     val input = readFileAsLinesUsingUseLines("./input.txt")
-        .map { s ->  s.toInt() };
-    var increases = 0;
-    for (index in 0..input.count() - 2) {
-        if (input[index + 1] > input[index]) {
-            increases++;
-        }
-    }
+        .map { s ->  s.toInt() }
+        .toTypedArray()
+    var increases = countIncreases(input);
     println("There are $increases increases")
 }
 
