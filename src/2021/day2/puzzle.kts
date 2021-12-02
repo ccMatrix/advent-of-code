@@ -9,9 +9,7 @@ enum class Direction {
 
 data class Instruction(val direction: Direction, val value: Int)
 data class NavigationData(var x: Int, var depth: Int, var aim: Int) {
-    override fun toString(): String {
-        return "$x x $depth, aim $aim"
-    }
+    override fun toString(): String = "$x x $depth, aim $aim"
 }
 
 public class Navigator(val instructions: List<Instruction>) {
@@ -65,7 +63,7 @@ val sampleInput = Arrays.asList(
 fun p1sample() {
     val navigator = Navigator(sampleInput)
     navigator.navigateDirectly()
-    println("Final position is ${navigator.position}")
+    println("Final position is ${navigator.position}. Result is ${navigator.calcResult()}")
 }
 
 fun puzzle1() {
@@ -78,7 +76,7 @@ fun puzzle1() {
 fun p2sample() {
     val navigator = Navigator(sampleInput)
     navigator.navigateWithAim()
-    println("Final position is ${navigator.position}")
+    println("Final position is ${navigator.position}. Result is ${navigator.calcResult()}")
 }
 
 fun puzzle2() {
