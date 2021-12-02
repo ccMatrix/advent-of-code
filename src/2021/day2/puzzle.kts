@@ -1,4 +1,5 @@
 import java.io.File
+import java.util.Arrays
 
 enum class Direction {
     forward,
@@ -7,35 +8,26 @@ enum class Direction {
 }
 
 data class Instruction(val direction: Direction, val value: Int)
-data class Point(var x: Int, var y: Int) {
-    override fun toString(): String {
-        return "$x / $y"
-    }
-}
 data class NavigationData(var x: Int, var depth: Int, var aim: Int) {
     override fun toString(): String {
         return "$x x $depth, aim $aim"
     }
 }
 
-public class Navigator1(val instructions: List<Instruction>) {
-    val position = Point(0, 0)
+public class Navigator(val instructions: List<Instruction>) {
+    val position = NavigationData(0, 0, 0)
 
-    fun execute() {
+    fun navigateDirectly() {
         instructions.forEach {
             when (it.direction) {
                 Direction.forward -> position.x += it.value
-                Direction.down -> position.y += it.value
-                Direction.up -> position.y -= it.value
+                Direction.down -> position.depth += it.value
+                Direction.up -> position.depth -= it.value
             }
         }
     }
-}
 
-public class Navigator2(val instructions: List<Instruction>) {
-    val position = NavigationData(0, 0, 0)
-
-    fun execute() {
+    fun navigateWithAim() {
         instructions.forEach {
             when (it.direction) {
                 Direction.forward -> {
@@ -47,6 +39,10 @@ public class Navigator2(val instructions: List<Instruction>) {
             }
         }
     }
+
+    fun calcResult(): Int {
+        return position.x * position.depth
+    }
 }
 
 fun readInputFromFile(fileName: String): List<Instruction>
@@ -57,38 +53,42 @@ fun readInputFromFile(fileName: String): List<Instruction>
         Instruction(Direction.valueOf(data[0]), data[1].toInt())
     }
 
-val sampleInput = ArrayList<Instruction>(6)
-sampleInput.add(Instruction(Direction.forward, 5))
-sampleInput.add(Instruction(Direction.down, 5))
-sampleInput.add(Instruction(Direction.forward, 8))
-sampleInput.add(Instruction(Direction.up, 3))
-sampleInput.add(Instruction(Direction.down, 8))
-sampleInput.add(Instruction(Direction.forward, 2))
+val sampleInput = Arrays.asList(
+    Instruction(Direction.forward, 5),
+    Instruction(Direction.down, 5),
+    Instruction(Direction.forward, 8),
+    Instruction(Direction.up, 3),
+    Instruction(Direction.down, 8),
+    Instruction(Direction.forward, 2)
+)
 
 fun p1sample() {
-    val navigator = Navigator1(sampleInput)
-    navigator.execute()
+    val navigator = Navigator(sampleInput)
+    navigator.navigateDirectly()
     println("Final position is ${navigator.position}")
 }
 
 fun puzzle1() {
     val input = readInputFromFile("./input.txt")
-    val navigator = Navigator1(input)
-    navigator.execute()
-    println("Final position is ${navigator.position}. Result is ${navigator.position.x * navigator.position.y}")
+    val navigator = Navigator(input)
+    navigator.navigateDirectly()
+    println("Final position is ${navigator.position}. Result is ${navigator.calcResult()}")
 }
 
 fun p2sample() {
-    val navigator = Navigator2(sampleInput)
-    navigator.execute()
+    val navigator = Navigator(sampleInput)
+    navigator.navigateWithAim()
     println("Final position is ${navigator.position}")
 }
 
 fun puzzle2() {
     val input = readInputFromFile("./input.txt")
-    val navigator = Navigator2(input)
-    navigator.execute()
-    println("Final position is ${navigator.position}. Result is ${navigator.position.x * navigator.position.depth}")
+    val navigator = Navigator(input)
+    navigator.navigateWithAim()
+    println("Final position is ${navigator.position}. Result is ${navigator.calcResult()}")
 }
 
+p1sample()
+puzzle1()
+p2sample()
 puzzle2()
