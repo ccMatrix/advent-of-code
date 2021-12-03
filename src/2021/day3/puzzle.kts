@@ -26,20 +26,20 @@ fun generateBitmask(input: List<List<Int>>): Array<BitInfo> {
 fun parseGammaEpsilon(input: List<List<Int>>): GammaEpsilon {
     var bitInfo = generateBitmask(input)
     return GammaEpsilon(
-        bitInfo.map { if (it.oneCount > it.zeroCount) "1" else "0" }.joinToString("").toInt(2),
-        bitInfo.map { if (it.oneCount > it.zeroCount) "0" else "1" }.joinToString("").toInt(2)
+        bitInfo.map { if (it.oneCount > it.zeroCount) 1 else 0 }.joinToString("").toInt(2),
+        bitInfo.map { if (it.oneCount > it.zeroCount) 0 else 1 }.joinToString("").toInt(2)
     )
 }
 
 fun reduceForBit(list: List<List<Int>>, bit: Int, comparator: (zeros: Int, ones: Int) -> Int): Int {
-    var bitInfo = generateBitmask(list)
+    val bitInfo = generateBitmask(list)
+    val filterFor = comparator(bitInfo[bit].zeroCount, bitInfo[bit].oneCount)
     val filteredList = list.filter {
-        val filterFor = comparator(bitInfo[bit].zeroCount, bitInfo[bit].oneCount)
-        it[bit] == filterFor
+        it[bit].equals(filterFor)
     }
 
     if (filteredList.count() == 1) {
-        return filteredList.last().map { it.toString() }.joinToString("").toInt(2)
+        return filteredList.last().joinToString("").toInt(2)
     }
     return reduceForBit(filteredList, bit + 1, comparator)
 }
