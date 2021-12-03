@@ -8,7 +8,7 @@ data class BitInfo(var zeroCount: Int, var oneCount: Int)
 fun readInputFromFile(fileName: String): List<List<Int>>
         = File(fileName)
     .useLines { it.toList() }
-    .map { it.toCharArray().map { it.toString().toInt() } }
+    .map { it.map { it.toString().toInt() } }
 
 fun generateBitmask(input: List<List<Int>>): Array<BitInfo> {
     val bitInfo = Array<BitInfo>(input[0].count(), { BitInfo(0, 0) })
