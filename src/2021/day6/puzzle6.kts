@@ -1,6 +1,6 @@
 import java.io.File
 
-val sampleInput = mutableListOf(3, 4, 3, 1, 2);
+val sampleInput = listOf(3, 4, 3, 1, 2);
 fun readFile(fileName: String): List<Int>
         = File(fileName)
         .readText()
@@ -10,21 +10,7 @@ fun readFile(fileName: String): List<Int>
             it.toInt()
         }
 
-fun simulateDay(lanternfish: MutableList<Int>) {
-    var newFishCount = 0
-    lanternfish.forEachIndexed { idx, timer ->
-        when (timer) {
-            in 1..8 -> lanternfish[idx] = timer - 1
-            0 -> {
-                lanternfish[idx] = 6
-                newFishCount++
-            }
-        }
-    }
-    lanternfish.addAll(Array<Int>(newFishCount, { 8 }))
-}
-
-fun simulateDaysLowMem(lanternfish: MutableList<Int>, days: Int) {
+fun simulateDaysLowMem(lanternfish: List<Int>, days: Int) {
     var fishPopulation: Array<Long> = Array(9, { 0L })
     lanternfish.forEach {
         fishPopulation[it]++
@@ -54,7 +40,7 @@ fun p1sample() {
 }
 
 fun puzzle1() {
-    var lanternfish = readFile("input.txt").toMutableList()
+    var lanternfish = readFile("input.txt")
     simulateDaysLowMem(lanternfish, 80)
 }
 
@@ -64,7 +50,7 @@ fun p2sample() {
 }
 
 fun puzzle2() {
-    var lanternfish = readFile("input.txt").toMutableList()
+    var lanternfish = readFile("input.txt")
     simulateDaysLowMem(lanternfish, 256)
 }
 
