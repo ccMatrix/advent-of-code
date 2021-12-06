@@ -10,60 +10,65 @@ fun readFile(fileName: String): List<Int>
             it.toInt()
         }
 
-fun simulateDay(lanternfishes: MutableList<MutableList<Int>>) {
+fun simulateDay(lanternfish: MutableList<Int>) {
     var newFishCount = 0
-    lanternfishes.forEach { lanternfish ->
-        lanternfish.forEachIndexed { idx, timer ->
-            when (timer) {
-                in 1..8 -> lanternfish[idx] = timer - 1
-                0 -> {
-                    lanternfish[idx] = 6
-                    newFishCount++
-                }
+    lanternfish.forEachIndexed { idx, timer ->
+        when (timer) {
+            in 1..8 -> lanternfish[idx] = timer - 1
+            0 -> {
+                lanternfish[idx] = 6
+                newFishCount++
             }
         }
     }
-    lanternfishes.add(MutableList<Int>(newFishCount, { 8 }))
+    lanternfish.addAll(Array<Int>(newFishCount, { 8 }))
 }
 
-fun countFishes(lanternfishes: List<List<Int>>): Int =
-    lanternfishes.fold(0, { acc, list -> acc + list.count() })
+fun simulateDaysLowMem(lanternfish: MutableList<Int>, days: Int) {
+    var fishPopulation: Array<Long> = Array(9, { 0L })
+    lanternfish.forEach {
+        fishPopulation[it]++
+    }
+    for (day in 0..days - 1) {
+        val newFishPopulation: Array<Long> = Array(9, { 0L })
+        fishPopulation.forEachIndexed { index, fish ->
+            when (index) {
+                in 1..8 -> {
+                    newFishPopulation[index - 1] += fish
+                }
+                0 -> {
+                    newFishPopulation[6] += fish
+                    newFishPopulation[8] += fish
+                }
+            }
+        }
+        fishPopulation = newFishPopulation
+    }
+    val totalFish = fishPopulation.sumOf { it }
+    println("Total fish population is: ${totalFish}")
+}
 
 fun p1sample() {
-    var lanternfish = mutableListOf(sampleInput)
-    for (day in 0..79) {
-        simulateDay(lanternfish)
-    }
-    println("There are now ${countFishes(lanternfish)} lanternfish")
+    var lanternfish = sampleInput
+    simulateDaysLowMem(lanternfish, 80)
 }
 
 fun puzzle1() {
-    var lanternfish = mutableListOf(readFile("input.txt").toMutableList())
-    for (day in 0..79) {
-        simulateDay(lanternfish)
-    }
-    println("There are now ${countFishes(lanternfish)} lanternfish")
+    var lanternfish = readFile("input.txt").toMutableList()
+    simulateDaysLowMem(lanternfish, 80)
 }
 
 fun p2sample() {
-    var lanternfish = mutableListOf(sampleInput)
-    for (day in 0..255) {
-        println("Processing s2 day $day ...")
-        simulateDay(lanternfish)
-    }
-    println("There are now ${lanternfish.count()} lanternfish")
+    var lanternfish = sampleInput
+    simulateDaysLowMem(lanternfish, 256)
 }
 
-//fun puzzle2() {
-//    var lanternfish = mutableListOf(readFile("input.txt").toMutableList())
-//    for (day in 0..255) {
-//        println("Processing day $day ...")
-//        simulateDay(lanternfish)
-//    }
-//    println("There are now ${lanternfish.count()} lanternfish")
-//}
+fun puzzle2() {
+    var lanternfish = readFile("input.txt").toMutableList()
+    simulateDaysLowMem(lanternfish, 256)
+}
 
 p1sample()
 puzzle1()
 p2sample()
-//puzzle2()
+puzzle2()
