@@ -38,12 +38,11 @@ fun findIntersects(lines: List<Line>): Int {
         val dy = delta(line.from.y - line.to.y)
 
         var p = Point(line.from.x, line.from.y)
-        do {
-            markMap(p)
-            p = Point(p.x + dx, p.y + dy)
-        }
-        while (p != line.to)
         markMap(p)
+        while (p != line.to) {
+            p = Point(p.x + dx, p.y + dy)
+            markMap(p)
+        }
     }
     return pointMap.values.count { it > 1 }
 }
