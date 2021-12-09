@@ -69,7 +69,7 @@ fun readAndParseInputFromFile(fileName: String): BingoGame {
     var boards: List<BingoBoard> = List<BingoBoard>(boardCount, {
         BingoBoard(
             input.subList(it * 5 + 2 + (it * 1), it * 5 + 7 + (it * 1))
-            .map { it.trim().split("\\s+".toRegex()).map { BingoField(it.toString().toInt(), false) } }
+            .map { it.trim().split("\\s+".toRegex()).map { BingoField(it.toInt(), false) } }
         )
     })
     return BingoGame(instructions, boards)

@@ -4,7 +4,7 @@ fun readFile(fileName: String): List<List<Int>>
         = File(fileName)
     .useLines { it.toList() }
     .map {
-        it.map { it.toString().toInt() }
+        it.map { it.digitToInt() }
     }
 
 data class Point(val x: Int, val y: Int, val value: Int, var fields: MutableList<Point> = emptyList<Point>().toMutableList())
