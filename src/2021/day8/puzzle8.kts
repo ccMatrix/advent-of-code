@@ -105,31 +105,17 @@ fun decodeConnections(input: List<Line>)
         acc + findConnectionCode(line)
     })
 
-fun p1sample() {
-    val sampleInput = readFile("sampleInput.txt")
-    val count = countOneFourSevenEight(sampleInput)
-    println("There are $count 1,2,4,7 values")
-}
-
-fun puzzle1() {
-    val input = readFile("input.txt")
+fun puzzle1(input: List<Line>) {
     val count = countOneFourSevenEight(input)
     println("There are $count 1,2,4,7 values")
 }
 
-fun p2sample() {
-    val sampleInput = readFile("sampleInput.txt")
-    val code = decodeConnections(sampleInput)
-    println("Sum of all codes is $code")
-}
-
-fun puzzle2() {
-    val input = readFile("input.txt")
+fun puzzle2(input: List<Line>) {
     val code = decodeConnections(input)
     println("Sum of all codes is $code")
 }
 
-p1sample()
-puzzle1()
-p2sample()
-puzzle2()
+puzzle1(readFile("sampleInput.txt"))
+puzzle1(readFile("input.txt"))
+puzzle2(readFile("sampleInput.txt"))
+puzzle2(readFile("input.txt"))

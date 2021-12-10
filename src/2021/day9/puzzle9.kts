@@ -69,35 +69,21 @@ fun largestBasinsSize(basins: List<Point>): Int =
         .map { it.fields.count() }
         .fold(1, { acc, i -> acc * i })
 
-fun p1sample() {
+fun puzzle1(input: List<List<Int>>) {
     val risk = calculateRiskLevel(
-        findLowPoints(readFile("sampleInput.txt"))
+        findLowPoints(input)
     )
     println("Risk level is $risk")
 }
 
-fun puzzle1() {
-    val risk = calculateRiskLevel(
-        findLowPoints(readFile("input.txt"))
-    )
-    println("Risk level is $risk")
-}
-
-fun p2sample() {
+fun puzzle2(input: List<List<Int>>) {
     val largestBasinSize = largestBasinsSize(
-        findBasins(readFile("sampleInput.txt"))
+        findBasins(input)
     )
     println("Sum of largest basins is $largestBasinSize")
 }
 
-fun puzzle2() {
-    val largestBasinSize = largestBasinsSize(
-        findBasins(readFile("input.txt"))
-    )
-    println("Sum of largest basins is $largestBasinSize")
-}
-
-p1sample()
-puzzle1()
-p2sample()
-puzzle2()
+puzzle1(readFile("sampleInput.txt"))
+puzzle1(readFile("input.txt"))
+puzzle2(readFile("sampleInput.txt"))
+puzzle2(readFile("input.txt"))

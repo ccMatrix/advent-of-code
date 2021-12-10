@@ -75,31 +75,17 @@ fun readAndParseInputFromFile(fileName: String): BingoGame {
     return BingoGame(instructions, boards)
 }
 
-fun p1sample() {
-    val bingoGame = readAndParseInputFromFile("sampleInput.txt")
+fun puzzle1(bingoGame: BingoGame) {
     bingoGame.play()
     println(bingoGame.winnerBoards.first().result())
 }
 
-fun puzzle1() {
-    val bingoGame = readAndParseInputFromFile("input.txt")
-    bingoGame.play()
-    println(bingoGame.winnerBoards.first().result())
-}
-
-fun p2sample() {
-    val bingoGame = readAndParseInputFromFile("sampleInput.txt")
+fun puzzle2(bingoGame: BingoGame) {
     bingoGame.play()
     println(bingoGame.winnerBoards.last().result())
 }
 
-fun puzzle2() {
-    val bingoGame = readAndParseInputFromFile("input.txt")
-    bingoGame.play()
-    println(bingoGame.winnerBoards.last().result())
-}
-
-p1sample()
-puzzle1()
-p2sample()
-puzzle2()
+puzzle1(readAndParseInputFromFile("sampleInput.txt"))
+puzzle1(readAndParseInputFromFile("input.txt"))
+puzzle2(readAndParseInputFromFile("sampleInput.txt"))
+puzzle2(readAndParseInputFromFile("input.txt"))

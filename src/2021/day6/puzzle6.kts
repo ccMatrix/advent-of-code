@@ -34,27 +34,15 @@ fun simulateDaysLowMem(lanternfish: List<Int>, days: Int) {
     println("Total fish population is: ${totalFish}")
 }
 
-fun p1sample() {
-    var lanternfish = sampleInput
-    simulateDaysLowMem(lanternfish, 80)
+fun puzzle1(input: List<Int>) {
+    simulateDaysLowMem(input, 80)
 }
 
-fun puzzle1() {
-    var lanternfish = readFile("input.txt")
-    simulateDaysLowMem(lanternfish, 80)
+fun puzzle2(input: List<Int>) {
+    simulateDaysLowMem(input, 256)
 }
 
-fun p2sample() {
-    var lanternfish = sampleInput
-    simulateDaysLowMem(lanternfish, 256)
-}
-
-fun puzzle2() {
-    var lanternfish = readFile("input.txt")
-    simulateDaysLowMem(lanternfish, 256)
-}
-
-p1sample()
-puzzle1()
-p2sample()
-puzzle2()
+puzzle1(sampleInput)
+puzzle1(readFile("input.txt"))
+puzzle2(sampleInput)
+puzzle2(readFile("input.txt"))

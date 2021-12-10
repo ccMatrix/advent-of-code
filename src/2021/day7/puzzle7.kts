@@ -39,27 +39,17 @@ fun findOptimalPosition(input: List<Int>, fuelCalculation: (input: List<Int>, po
     return minFuel
 }
 
-fun p1sample() {
-    val minFuel = findOptimalPosition(sampleInput, calcFuelSimple())
+fun puzzle1(input: List<Int>) {
+    val minFuel = findOptimalPosition(input, calcFuelSimple())
     println("Minimum fuel usage is: $minFuel")
 }
 
-fun puzzle1() {
-    val minFuel = findOptimalPosition(readFile("input.txt"), calcFuelSimple())
+fun puzzle2(input: List<Int>) {
+    val minFuel = findOptimalPosition(input, calcFuelComplex())
     println("Minimum fuel usage is: $minFuel")
 }
 
-fun p2sample() {
-    val minFuel = findOptimalPosition(sampleInput, calcFuelComplex())
-    println("Minimum fuel usage is: $minFuel")
-}
-
-fun puzzle2() {
-    val minFuel = findOptimalPosition(readFile("input.txt"), calcFuelComplex())
-    println("Minimum fuel usage is: $minFuel")
-}
-
-p1sample()
-puzzle1()
-p2sample()
-puzzle2()
+puzzle1(sampleInput)
+puzzle1(readFile("input.txt"))
+puzzle2(sampleInput)
+puzzle2(readFile("input.txt"))

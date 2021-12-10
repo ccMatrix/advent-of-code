@@ -14,26 +14,23 @@ fun Array<Int>.countIncreases(): Int
                 if (idx < this.size - 1 && this[idx + 1] > element) acc + 1 else acc
         })
 
-fun puzzle1() {
-    val increases = readFileAsLinesUsingUseLines("./input.txt")
+val sampleInput = listOf(199, 200, 208, 210, 200, 207, 240, 269, 260, 263)
+
+fun puzzle1(input: List<Int>) {
+    val increases = input
         .toTypedArray()
         .countIncreases()
     println("There are $increases increases")
 }
 
-fun p2sample() {
-    val increases = listOf(199, 200, 208, 210, 200, 207, 240, 269, 260, 263)
+fun puzzle2(input: List<Int>) {
+    val increases = input
         .calcSlidingValues()
         .countIncreases()
     println("There are $increases increases")
 }
 
-fun puzzle2() {
-    val increases = readFileAsLinesUsingUseLines("./input.txt")
-        .calcSlidingValues()
-        .countIncreases()
-    println("There are $increases increases")
-}
-
-puzzle1()
-puzzle2()
+puzzle1(sampleInput)
+puzzle1(readFileAsLinesUsingUseLines("./input.txt"))
+puzzle2(sampleInput)
+puzzle2(readFileAsLinesUsingUseLines("./input.txt"))

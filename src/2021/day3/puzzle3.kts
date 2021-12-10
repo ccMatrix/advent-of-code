@@ -67,31 +67,18 @@ val sampleInput = arrayListOf(
     arrayListOf(0, 1, 0, 1, 0)
 )
 
-fun p1sample() {
-    val gammaEpsilon = parseGammaEpsilon(sampleInput)
-    println("Result is ${gammaEpsilon.result()}")
-}
-
-fun puzzle1() {
-    val input = readInputFromFile("input.txt")
+fun puzzle1(input: List<List<Int>>) {
     val gammaEpsilon = parseGammaEpsilon(input)
     println("Result is ${gammaEpsilon.result()}")
 }
 
-fun p2sample() {
-    val oxygenValue = findOxygenGeneratorRating(sampleInput)
-    val co2Value = findCo2ScrubberRating(sampleInput)
-    println("Oxygen Value is $oxygenValue, Co2 Value is $co2Value, Result is ${oxygenValue * co2Value}")
-}
-
-fun puzzle2() {
-    val input = readInputFromFile("input.txt")
+fun puzzle2(input: List<List<Int>>) {
     val oxygenValue = findOxygenGeneratorRating(input)
     val co2Value = findCo2ScrubberRating(input)
     println("Oxygen Value is $oxygenValue, Co2 Value is $co2Value, Result is ${oxygenValue * co2Value}")
 }
 
-p1sample()
-puzzle1()
-p2sample()
-puzzle2()
+puzzle1(sampleInput)
+puzzle1(readInputFromFile("input.txt"))
+puzzle2(sampleInput)
+puzzle2(readInputFromFile("input.txt"))

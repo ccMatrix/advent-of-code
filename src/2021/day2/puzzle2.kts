@@ -60,33 +60,19 @@ val sampleInput = Arrays.asList(
     Instruction(Direction.forward, 2)
 )
 
-fun p1sample() {
-    val navigator = Navigator(sampleInput)
-    navigator.navigateDirectly()
-    println("Final position is ${navigator.position}. Result is ${navigator.calcResult()}")
-}
-
-fun puzzle1() {
-    val input = readInputFromFile("./input.txt")
+fun puzzle1(input: List<Instruction>) {
     val navigator = Navigator(input)
     navigator.navigateDirectly()
     println("Final position is ${navigator.position}. Result is ${navigator.calcResult()}")
 }
 
-fun p2sample() {
-    val navigator = Navigator(sampleInput)
-    navigator.navigateWithAim()
-    println("Final position is ${navigator.position}. Result is ${navigator.calcResult()}")
-}
-
-fun puzzle2() {
-    val input = readInputFromFile("./input.txt")
+fun puzzle2(input: List<Instruction>) {
     val navigator = Navigator(input)
     navigator.navigateWithAim()
     println("Final position is ${navigator.position}. Result is ${navigator.calcResult()}")
 }
 
-p1sample()
-puzzle1()
-p2sample()
-puzzle2()
+puzzle1(sampleInput)
+puzzle1(readInputFromFile("./input.txt"))
+puzzle2(sampleInput)
+puzzle2(readInputFromFile("./input.txt"))

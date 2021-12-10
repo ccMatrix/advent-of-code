@@ -47,35 +47,19 @@ fun findIntersects(lines: List<Line>): Int {
     return pointMap.values.count { it > 1 }
 }
 
-fun p1sample() {
-    val lines = readAndParseInputFromFile("sampleInput.txt")
+fun puzzle1(input: List<Line>) {
     val intersects = findIntersects(
-        lines.filter { it.from.x == it.to.x || it.from.y == it.to.y }
+        input.filter { it.from.x == it.to.x || it.from.y == it.to.y }
     )
     println("Total intersects are: $intersects")
 }
 
-fun puzzle1() {
-    val lines = readAndParseInputFromFile("input.txt")
-    val intersects = findIntersects(
-        lines.filter { it.from.x == it.to.x || it.from.y == it.to.y }
-    )
+fun puzzle2(input: List<Line>) {
+    val intersects = findIntersects(input)
     println("Total intersects are: $intersects")
 }
 
-fun p2sample() {
-    val lines = readAndParseInputFromFile("sampleInput.txt")
-    val intersects = findIntersects(lines)
-    println("Total intersects are: $intersects")
-}
-
-fun puzzle2() {
-    val lines = readAndParseInputFromFile("input.txt")
-    val intersects = findIntersects(lines)
-    println("Total intersects are: $intersects")
-}
-
-p1sample()
-puzzle1()
-p2sample()
-puzzle2()
+puzzle1(readAndParseInputFromFile("sampleInput.txt"))
+puzzle1(readAndParseInputFromFile("input.txt"))
+puzzle2(readAndParseInputFromFile("sampleInput.txt"))
+puzzle2(readAndParseInputFromFile("input.txt"))
