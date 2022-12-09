@@ -1,6 +1,4 @@
 import java.io.File
-import kotlin.math.exp
-
 
 fun loadMap(fileName: String): List<List<Int>>
         = File(fileName)
