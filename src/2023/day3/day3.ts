@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { start } from 'repl';
 
 const engineSchematic = fs.readFileSync(path.join(__dirname, 'input.txt'))
     .toString()
