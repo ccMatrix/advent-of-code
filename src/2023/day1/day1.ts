@@ -7,28 +7,19 @@ const findNumbers = (transform: boolean) => {
         .map((line) => {
             if (transform) {
                 const numbers = [ 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine' ];
-                let smallest = 1000;
-                let smallestSeek = '';
-                let smallestTarget = '';
-                let tallest = -1;
-                let tallestSeek = '';
-                let tallestTarget = '';
+                let first = { pos: Infinity, seek: '', target: '' };
+                let last = { pos: -1, seek: '', target: '' };
                 numbers.forEach((numString, idx) => {
-                    const posSmallest = line.indexOf(numString);
-                    if (posSmallest >= 0 && posSmallest < smallest) {
-                        smallest = posSmallest;
-                        smallestSeek = numString;
-                        smallestTarget = (idx + 1).toString();
+                    const posfirst = line.indexOf(numString);
+                    if (posfirst >= 0 && posfirst < first.pos) {
+                        first = {pos: posfirst, seek: numString, target: `${idx + 1}`};
                     }
-                    const posTallest = line.lastIndexOf(numString);
-                    if (posTallest >= 0 && posTallest > tallest) {
-                        tallest = posTallest;
-                        tallestSeek = numString;
-                        tallestTarget = (idx + 1).toString();
+                    const poslast = line.lastIndexOf(numString);
+                    if (poslast >= 0 && poslast > last.pos) {
+                        last = {pos: poslast, seek: numString, target: `${idx + 1}`};
                     }
                 });
-                line = line.replace(RegExp(smallestSeek, 'g'), smallestTarget)
-                    .replace(RegExp(tallestSeek, 'g'), tallestTarget);
+                line = line.replace(RegExp(first.seek, 'g'), first.target).replace(RegExp(last.seek, 'g'), last.target);
             }
             const digits = line.match(/(\d{1})/g);
             if (digits) {
