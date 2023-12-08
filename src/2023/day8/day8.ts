@@ -63,17 +63,15 @@ const parseMap = (data: string[]) => {
     const instructions = input[0].trim().split('');
 
     const traverseMap = (map: Map<string, INode>, instructions: string[]) => {
-        const gcd = (a: number, b: number): number => {
-            if (!b) {
-                return a
-            }
-            return gcd(b, a % b)
-        }
-        const lcm = (...args: number[]) => {
-            return args.reduce((a, b) => Math.abs(a * b) / gcd(a, b))
-        }
+        /**
+         * greatest-common-divisor and least-common-multiple methods from ruffle1986:
+         * https://github.com/ruffle1986?tab=repositories&q=common
+         */
+        const gcd = (a: number, b: number): number => (!b) ? a : gcd(b, a % b);
+        const lcm = (...args: number[]) => args.reduce((a, b) => Math.abs(a * b) / gcd(a, b));
 
         let currentNodes = Array.from(map.keys()).filter(n => n.endsWith('A'));
+        console.log('Part2:', 'Traversing map for', currentNodes.length, 'starting Nodes');
         const nodeCounter = new Map<string, number>();
         let currentPos = 0;
         let totalSteps = 0;
@@ -94,12 +92,12 @@ const parseMap = (data: string[]) => {
             currentNodes
                 .filter(n => n.endsWith('Z'))
                 .forEach((n) => {
-                    console.log('Node', n, 'finished after', totalSteps, 'steps');
+                    console.log('Part2:', 'Node finished after', totalSteps, 'steps');
                     nodeCounter.set(n, totalSteps);
                 });
             currentNodes = currentNodes.filter(n => !n.endsWith('Z'));
             if (currentNodes.length === 0) {
-                console.log('All nodes are done');
+                console.log('Part2:', 'All nodes are done');
                 return lcm(...Array.from(nodeCounter.values()));
             }
 
