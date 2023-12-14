@@ -1,7 +1,7 @@
 import { assertEquals } from '../helper';
 
 (() => {
-    const input = [ 12,1,16,3,11,0 ];
+    const input = [ 5,1,9,18,13,8,0 ];
 
     const examples = [
         { input: [ 0,3,6 ], result: 436 },
