@@ -1,11 +1,11 @@
 {
     "compilerOptions": {
-      "target": "es5",
+      "target": "ESNext",
       "module": "commonjs",
       "outDir": "./build",
       "sourceMap": true
     },
     "include": [
       "src/**/*"
-    ],  
+    ],
   }
