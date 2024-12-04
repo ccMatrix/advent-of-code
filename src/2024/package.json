@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "day": "ts-node",
+    "day": "bun",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Benjamin Schirmer",
