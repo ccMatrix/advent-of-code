@@ -1,6 +1,5 @@
-import { strict } from 'assert';
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 const input = fs.readFileSync(path.join(__dirname, 'input.txt'))
     .toString()
@@ -8,13 +7,13 @@ const input = fs.readFileSync(path.join(__dirname, 'input.txt'))
     .split(',')
     .map(line => line.trim().split('-').map(n => parseInt(n, 10)));
 
-const findInvalidIdInRange = (min: number, max: number, occurance?: number): number[] => {
+const findInvalidIdInRange = (min: number, max: number, simpleMode?: boolean): number[] => {
     let invalidIds: number[] = [];
     for (let id = min; id <= max; id++) {
         const strId = id.toString();
-        if (occurance === 2) {
-            const first = strId.substring(0, Math.ceil(strId.length / occurance));
-            const second = strId.substring(Math.ceil(strId.length / occurance));
+        if (simpleMode) {
+            const first = strId.substring(0, Math.ceil(strId.length / 2));
+            const second = strId.substring(Math.ceil(strId.length / 2));
             if (first === second) {
                 invalidIds.push(parseInt(strId, 10));
             }
@@ -37,14 +36,14 @@ const findInvalidIdInRange = (min: number, max: number, occurance?: number): num
     return invalidIds;
 };
 
-const findInvalidIds = (data: number[][], occurance?: number) => {
+const findInvalidIds = (data: number[][], simpleMode?: boolean) => {
     const invalidIds: number[] = [];
     for (const range of data) {
-        invalidIds.push(...findInvalidIdInRange(range[0], range[1], occurance));
+        invalidIds.push(...findInvalidIdInRange(range[0], range[1], simpleMode));
     }
 
     return invalidIds.reduce((a, b) => a + b, 0);
 };
 
-console.log('Invalid Ids 1:', findInvalidIds(input, 2));
+console.log('Invalid Ids 1:', findInvalidIds(input, true));
 console.log('Invalid Ids 2:', findInvalidIds(input));
